@@ -1,0 +1,799 @@
+{% extends "base.html" %}
+{% block title %}Gestion — Smart Delivery System{% endblock %}
+
+{% block head %}
+<style>
+/* ── Tabs ── */
+.manage-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 0 0 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  padding: 10px 22px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
+}
+
+/* ── Forms ── */
+.form-section { display: none; }
+.form-section.active { display: block; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group.full { grid-column: 1 / -1; }
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.form-label span { color: var(--danger); margin-left: 2px; }
+
+.form-input, .form-select {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 10px 14px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.form-input:focus, .form-select:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 2px rgba(245,158,11,0.15);
+}
+.form-input::placeholder { color: var(--text-muted); opacity: 0.6; }
+.form-select option { background: #1e293b; }
+
+.form-input.error { border-color: var(--danger); }
+.field-error {
+  font-size: 11px;
+  color: var(--danger);
+  font-family: var(--font-mono);
+  display: none;
+}
+.field-error.show { display: block; }
+
+/* ── Submit Button ── */
+.btn-submit {
+  background: var(--amber);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-submit:hover { background: #f5b942; transform: translateY(-1px); }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--text-muted); color: var(--text-primary); }
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 14px 22px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 9999;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  max-width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: #14532d; border: 1px solid var(--ok); color: var(--ok); }
+.toast.error   { background: #450a0a; border: 1px solid var(--danger); color: var(--danger); }
+
+/* ── Divider ── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 28px 0 20px;
+}
+.section-divider-line { flex: 1; height: 1px; background: var(--border); }
+.section-divider-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Driver Search ── */
+.driver-search-wrap { position: relative; }
+.driver-results {
+  position: absolute;
+  top: 100%;
+  left: 0; right: 0;
+  background: #1e293b;
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  z-index: 10;
+  display: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.driver-result-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.driver-result-item:hover { background: rgba(245,158,11,0.08); }
+.driver-result-item:last-child { border-bottom: none; }
+.driver-result-badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+
+/* ── Info note ── */
+.info-note {
+  background: rgba(6,182,212,0.06);
+  border: 1px solid rgba(6,182,212,0.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--teal);
+  font-family: var(--font-mono);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* ── Range inputs ── */
+.range-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.range-wrap input[type=range] {
+  flex: 1;
+  accent-color: var(--amber);
+}
+.range-val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--amber);
+  min-width: 40px;
+  text-align: right;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">GESTION <span class="accent">DONNÉES</span></div>
+    <div class="page-subtitle">Ajouter routes · Ajouter expéditions · Modifier chauffeurs</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="manage-tabs">
+    <button class="tab-btn active" onclick="switchTab('route', this)">🗺 Nouvelle Route</button>
+    <button class="tab-btn" onclick="switchTab('shipment', this)">🚚 Nouvelle Expédition</button>
+    <button class="tab-btn" onclick="switchTab('driver', this)">👤 Modifier Chauffeur</button>
+  </div>
+
+  <!-- ═══════════════ ROUTE FORM ═══════════════ -->
+  <div class="form-section active" id="section-route">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Créer une nouvelle Route</span>
+        <span class="card-badge teal">ROUTES</span>
+      </div>
+      <div class="card-body">
+        <form id="form-route" onsubmit="submitRoute(event)">
+
+          <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <div class="section-divider-label">Trajet</div>
+            <div class="section-divider-line"></div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Ville de départ <span>*</span></label>
+              <select class="form-select" id="r-depart" required>
+                <option value="">— Sélectionner —</option>
+                <option>Casablanca</option><option>Rabat</option><option>Fes</option>
+                <option>Marrakech</option><option>Tanger</option><option>Agadir</option>
+                <option>Oujda</option><option>Meknes</option><option>Tetouan</option>
+                <option>Laayoune</option>
+              </select>
+              <span class="field-error" id="err-r-depart">Champ obligatoire</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ville de destination <span>*</span></label>
+              <select class="form-select" id="r-destination" required>
+                <option value="">— Sélectionner —</option>
+                <option>Casablanca</option><option>Rabat</option><option>Fes</option>
+                <option>Marrakech</option><option>Tanger</option><option>Agadir</option>
+                <option>Oujda</option><option>Meknes</option><option>Tetouan</option>
+                <option>Laayoune</option>
+              </select>
+              <span class="field-error" id="err-r-destination">Champ obligatoire</span>
+            </div>
+          </div>
+
+          <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <div class="section-divider-label">Caractéristiques</div>
+            <div class="section-divider-line"></div>
+          </div>
+
+          <div class="form-grid cols-3">
+            <div class="form-group">
+              <label class="form-label">Distance (km) <span>*</span></label>
+              <input class="form-input" id="r-distance" type="number" min="1" max="5000" placeholder="ex: 320" required>
+              <span class="field-error" id="err-r-distance">Valeur invalide</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Durée estimée (h) <span>*</span></label>
+              <input class="form-input" id="r-duree" type="number" min="0.5" max="72" step="0.5" placeholder="ex: 4.5" required>
+              <span class="field-error" id="err-r-duree">Valeur invalide</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type de route <span>*</span></label>
+              <select class="form-select" id="r-type" required>
+                <option value="">— Sélectionner —</option>
+                <option value="urbain">Urbain</option>
+                <option value="nationale">Nationale</option>
+                <option value="autoroute">Autoroute</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Péages (MAD)</label>
+              <input class="form-input" id="r-peages" type="number" min="0" step="0.5" placeholder="0.00">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Restrictions</label>
+              <input class="form-input" id="r-restrictions" type="text" placeholder="ex: poids_max_40t; gabarit_renforce">
+            </div>
+          </div>
+
+          <div class="form-actions" style="margin-top:24px">
+            <button type="submit" class="btn-submit" id="btn-route">
+              <span>＋</span> Créer la Route
+            </button>
+            <button type="button" class="btn-secondary" onclick="resetForm('form-route')">Réinitialiser</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SHIPMENT FORM ═══════════════ -->
+  <div class="form-section" id="section-shipment">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Créer une nouvelle Expédition</span>
+        <span class="card-badge amber">SHIPMENTS</span>
+      </div>
+      <div class="card-body">
+        <form id="form-shipment" onsubmit="submitShipment(event)">
+
+          <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <div class="section-divider-label">Identification</div>
+            <div class="section-divider-line"></div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Véhicule ID <span>*</span></label>
+              <input class="form-input" id="s-vehicule" type="text" placeholder="ex: V44_3" required>
+              <span class="field-error" id="err-s-vehicule">Format invalide (ex: V44_3)</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Route <span>*</span></label>
+              <select class="form-select" id="s-route" required>
+                <option value="">Chargement des routes…</option>
+              </select>
+              <span class="field-error" id="err-s-route">Sélectionner une route</span>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Chauffeur <span>*</span></label>
+              <select class="form-select" id="s-chauffeur" required>
+                <option value="">Chargement des chauffeurs…</option>
+              </select>
+              <span class="field-error" id="err-s-chauffeur">Sélectionner un chauffeur</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type de marchandise <span>*</span></label>
+              <select class="form-select" id="s-type-march" required>
+                <option value="">— Sélectionner —</option>
+                <option>carrosserie</option><option>pièces moteur</option>
+                <option>électronique</option><option>alimentaire</option>
+                <option>textile</option><option>matériaux construction</option>
+                <option>produits chimiques</option><option>General</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <div class="section-divider-label">Dates & Poids</div>
+            <div class="section-divider-line"></div>
+          </div>
+
+          <div class="form-grid cols-3">
+            <div class="form-group">
+              <label class="form-label">Date de départ <span>*</span></label>
+              <input class="form-input" id="s-date-depart" type="date" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date d'arrivée <span>*</span></label>
+              <input class="form-input" id="s-date-arrivee" type="date" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Poids (kg) <span>*</span></label>
+              <input class="form-input" id="s-poids" type="number" min="1" max="100000" placeholder="ex: 15000" required>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Statut initial <span>*</span></label>
+              <select class="form-select" id="s-statut" required>
+                <option value="en_transit">🚚 En transit</option>
+                <option value="livre">✅ Livré</option>
+                <option value="retard">⏰ Retard</option>
+                <option value="annule">❌ Annulé</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions" style="margin-top:24px">
+            <button type="submit" class="btn-submit" id="btn-shipment">
+              <span>＋</span> Créer l'Expédition
+            </button>
+            <button type="button" class="btn-secondary" onclick="resetForm('form-shipment')">Réinitialiser</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ DRIVER EDIT FORM ═══════════════ -->
+  <div class="form-section" id="section-driver">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Modifier un Chauffeur</span>
+        <span class="card-badge teal">DRIVERS</span>
+      </div>
+      <div class="card-body">
+
+        <div class="info-note">
+          ℹ️ Recherchez un chauffeur par nom ou ID, puis modifiez ses champs opérationnels.
+        </div>
+
+        <!-- Search -->
+        <div class="form-group" style="margin-bottom:20px">
+          <label class="form-label">Rechercher un chauffeur</label>
+          <div class="driver-search-wrap">
+            <input class="form-input" id="d-search" type="text"
+              placeholder="Nom ou ID du chauffeur…"
+              oninput="searchDrivers(this.value)" autocomplete="off">
+            <div class="driver-results" id="driver-results"></div>
+          </div>
+        </div>
+
+        <!-- Selected driver info -->
+        <div id="driver-edit-form" style="display:none">
+          <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:14px 18px;margin-bottom:24px">
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-bottom:6px">CHAUFFEUR SÉLECTIONNÉ</div>
+            <div style="display:flex;align-items:center;gap:16px">
+              <div style="font-size:18px;font-weight:800;color:var(--text-primary)" id="d-selected-nom">—</div>
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--amber)" id="d-selected-id">—</div>
+              <span class="badge" id="d-selected-badge">—</span>
+            </div>
+          </div>
+
+          <form id="form-driver" onsubmit="submitDriver(event)">
+            <input type="hidden" id="d-id">
+
+            <div class="section-divider">
+              <div class="section-divider-line"></div>
+              <div class="section-divider-label">Champs modifiables</div>
+              <div class="section-divider-line"></div>
+            </div>
+
+            <div class="form-grid cols-3">
+              <div class="form-group">
+                <label class="form-label">Heures de conduite (h)</label>
+                <div class="range-wrap">
+                  <input type="range" id="d-heures" min="0" max="120" step="0.5"
+                    oninput="document.getElementById('val-heures').textContent = this.value + 'h'">
+                  <span class="range-val" id="val-heures">0h</span>
+                </div>
+                <input class="form-input" id="d-heures-num" type="number" min="0" max="120" step="0.5"
+                  placeholder="Valeur exacte"
+                  oninput="syncRange('d-heures', this.value, 'val-heures', 'h')">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Repos restant (h)</label>
+                <div class="range-wrap">
+                  <input type="range" id="d-repos" min="0" max="24" step="0.5"
+                    oninput="document.getElementById('val-repos').textContent = this.value + 'h'">
+                  <span class="range-val" id="val-repos">0h</span>
+                </div>
+                <input class="form-input" id="d-repos-num" type="number" min="0" max="24" step="0.5"
+                  placeholder="Valeur exacte"
+                  oninput="syncRange('d-repos', this.value, 'val-repos', 'h')">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nombre d'infractions</label>
+                <div class="range-wrap">
+                  <input type="range" id="d-infractions" min="0" max="10" step="1"
+                    oninput="document.getElementById('val-inf').textContent = this.value">
+                  <span class="range-val" id="val-inf">0</span>
+                </div>
+                <input class="form-input" id="d-inf-num" type="number" min="0" max="10" step="1"
+                  placeholder="Valeur exacte"
+                  oninput="syncRange('d-infractions', this.value, 'val-inf', '')">
+              </div>
+            </div>
+
+            <div class="form-actions" style="margin-top:24px">
+              <button type="submit" class="btn-submit" id="btn-driver">
+                ✓ Enregistrer les modifications
+              </button>
+              <button type="button" class="btn-secondary" onclick="clearDriverSelection()">Annuler</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* ── Tabs ── */
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('section-' + name).classList.add('active');
+}
+
+/* ── Toast ── */
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.className = 'toast', 3500);
+}
+
+/* ── Form reset ── */
+function resetForm(id) {
+  document.getElementById(id).reset();
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('show'));
+  document.querySelectorAll('.form-input, .form-select').forEach(el => el.classList.remove('error'));
+}
+
+/* ── Validation helper ── */
+function validateField(id, errId, condition) {
+  const el = document.getElementById(id);
+  const er = document.getElementById(errId);
+  if (!el) return true;
+  const invalid = condition ? condition(el.value) : !el.value.trim();
+  el.classList.toggle('error', invalid);
+  if (er) er.classList.toggle('show', invalid);
+  return !invalid;
+}
+
+/* ════════════════════════════════
+   ROUTE SUBMIT
+════════════════════════════════ */
+async function submitRoute(e) {
+  e.preventDefault();
+  let ok = true;
+  ok &= validateField('r-depart', 'err-r-depart');
+  ok &= validateField('r-destination', 'err-r-destination');
+  ok &= validateField('r-distance', 'err-r-distance', v => !v || parseFloat(v) <= 0);
+  ok &= validateField('r-duree', 'err-r-duree', v => !v || parseFloat(v) <= 0);
+  if (!ok) return;
+
+  const depart = document.getElementById('r-depart').value;
+  const dest   = document.getElementById('r-destination').value;
+  if (depart === dest) {
+    showToast('Le départ et la destination doivent être différents.', 'error'); return;
+  }
+
+  const btn = document.getElementById('btn-route');
+  btn.disabled = true; btn.textContent = '⏳ Création…';
+
+  try {
+    const res = await fetch('/api/manage/route', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        depart:       depart,
+        destination:  dest,
+        distance_km:  parseFloat(document.getElementById('r-distance').value),
+        duree_h:      parseFloat(document.getElementById('r-duree').value),
+        type_route:   document.getElementById('r-type').value || 'nationale',
+        peages:       parseFloat(document.getElementById('r-peages').value) || 0,
+        restrictions: document.getElementById('r-restrictions').value || 'aucune',
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`Route créée : ${data.route_id}`, 'success');
+      resetForm('form-route');
+    } else {
+      showToast(data.error || 'Erreur serveur', 'error');
+    }
+  } catch(err) {
+    showToast('Erreur de connexion', 'error');
+  }
+  btn.disabled = false; btn.innerHTML = '<span>＋</span> Créer la Route';
+}
+
+/* ════════════════════════════════
+   SHIPMENT SUBMIT
+════════════════════════════════ */
+async function submitShipment(e) {
+  e.preventDefault();
+  let ok = true;
+  ok &= validateField('s-vehicule', 'err-s-vehicule', v => !/^V\d+_\d+$/.test(v.trim()));
+  ok &= validateField('s-route', 'err-s-route');
+  ok &= validateField('s-chauffeur', 'err-s-chauffeur');
+  if (!ok) return;
+
+  const dateD = document.getElementById('s-date-depart').value;
+  const dateA = document.getElementById('s-date-arrivee').value;
+  if (dateD && dateA && dateA < dateD) {
+    showToast("La date d'arrivée doit être après la date de départ.", 'error'); return;
+  }
+
+  const btn = document.getElementById('btn-shipment');
+  btn.disabled = true; btn.textContent = '⏳ Création…';
+
+  try {
+    const res = await fetch('/api/manage/shipment', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        vehicule_id:      document.getElementById('s-vehicule').value.trim(),
+        route_id:         document.getElementById('s-route').value,
+        chauffeur_id:     document.getElementById('s-chauffeur').value,
+        type_marchandise: document.getElementById('s-type-march').value,
+        date_depart:      dateD,
+        date_arrivee:     dateA,
+        poids_kg:         parseFloat(document.getElementById('s-poids').value),
+        statut:           document.getElementById('s-statut').value,
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`Expédition créée : ${data.shipment_id}`, 'success');
+      resetForm('form-shipment');
+    } else {
+      showToast(data.error || 'Erreur serveur', 'error');
+    }
+  } catch(err) {
+    showToast('Erreur de connexion', 'error');
+  }
+  btn.disabled = false; btn.innerHTML = '<span>＋</span> Créer l\'Expédition';
+}
+
+/* ════════════════════════════════
+   DRIVER SEARCH & EDIT
+════════════════════════════════ */
+let driversCache = [];
+
+async function loadDriversCache() {
+  const data = await fetch('/api/drivers').then(r => r.json());
+  driversCache = data;
+  // Also populate shipment chauffeur select
+  const sel = document.getElementById('s-chauffeur');
+  sel.innerHTML = '<option value="">— Sélectionner —</option>' +
+    data.map(d => `<option value="${d.id}">${d.nom} (${d.id})</option>`).join('');
+}
+
+function searchDrivers(q) {
+  const box = document.getElementById('driver-results');
+  if (!q.trim()) { box.style.display = 'none'; return; }
+  const matches = driversCache.filter(d =>
+    d.nom.toLowerCase().includes(q.toLowerCase()) || d.id.toLowerCase().includes(q.toLowerCase())
+  ).slice(0, 6);
+  if (!matches.length) { box.style.display = 'none'; return; }
+  const riskLabel = r => r === 'ok' ? '🟢' : (r === 'warning' ? '🟡' : '🔴');
+  box.innerHTML = matches.map(d =>
+    `<div class="driver-result-item" onclick="selectDriver('${d.id}')">
+      <span>${d.nom}</span>
+      <span style="display:flex;gap:8px;align-items:center">
+        <span style="color:var(--text-muted);font-size:11px">${d.id}</span>
+        <span class="driver-result-badge">${riskLabel(d.risk)} ${d.risk}</span>
+      </span>
+    </div>`
+  ).join('');
+  box.style.display = 'block';
+}
+
+function selectDriver(id) {
+  const d = driversCache.find(x => x.id === id);
+  if (!d) return;
+  document.getElementById('driver-results').style.display = 'none';
+  document.getElementById('d-search').value = d.nom + ' (' + d.id + ')';
+  document.getElementById('d-id').value = d.id;
+  document.getElementById('d-selected-nom').textContent = d.nom;
+  document.getElementById('d-selected-id').textContent = d.id;
+  const badge = document.getElementById('d-selected-badge');
+  badge.textContent = d.risk;
+  badge.className = 'badge ' + (d.risk === 'ok' ? 'badge-ok' : d.risk === 'warning' ? 'badge-warn' : 'badge-danger');
+  // Set current values
+  setRangeVal('d-heures', d.heures, 'val-heures', 'h');
+  setRangeVal('d-repos',  d.repos,  'val-repos', 'h');
+  setRangeVal('d-infractions', d.infractions, 'val-inf', '');
+  document.getElementById('d-heures-num').value = d.heures;
+  document.getElementById('d-repos-num').value  = d.repos;
+  document.getElementById('d-inf-num').value    = d.infractions;
+  document.getElementById('driver-edit-form').style.display = 'block';
+}
+
+function setRangeVal(rangeId, val, labelId, suffix) {
+  const r = document.getElementById(rangeId);
+  r.value = val;
+  document.getElementById(labelId).textContent = val + suffix;
+}
+
+function syncRange(rangeId, val, labelId, suffix) {
+  document.getElementById(rangeId).value = val;
+  document.getElementById(labelId).textContent = val + suffix;
+}
+
+function clearDriverSelection() {
+  document.getElementById('d-search').value = '';
+  document.getElementById('driver-edit-form').style.display = 'none';
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.driver-search-wrap'))
+    document.getElementById('driver-results').style.display = 'none';
+});
+
+async function submitDriver(e) {
+  e.preventDefault();
+  const id = document.getElementById('d-id').value;
+  if (!id) { showToast('Sélectionnez un chauffeur', 'error'); return; }
+
+  const btn = document.getElementById('btn-driver');
+  btn.disabled = true; btn.textContent = '⏳ Enregistrement…';
+
+  try {
+    const res = await fetch('/api/manage/driver/' + id, {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        heures_conduite: parseFloat(document.getElementById('d-heures-num').value || document.getElementById('d-heures').value),
+        repos_restant_h: parseFloat(document.getElementById('d-repos-num').value  || document.getElementById('d-repos').value),
+        infractions:     parseInt(document.getElementById('d-inf-num').value       || document.getElementById('d-infractions').value),
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`Chauffeur ${id} mis à jour`, 'success');
+      loadDriversCache(); // refresh cache
+    } else {
+      showToast(data.error || 'Erreur serveur', 'error');
+    }
+  } catch(err) {
+    showToast('Erreur de connexion', 'error');
+  }
+  btn.disabled = false; btn.textContent = '✓ Enregistrer les modifications';
+}
+
+/* ── Load routes for shipment select ── */
+async function loadRouteSelect() {
+  const data = await fetch('/api/routes').then(r => r.json());
+  const sel = document.getElementById('s-route');
+  sel.innerHTML = '<option value="">— Sélectionner une route —</option>' +
+    data.map(r => `<option value="${r.id}">${r.depart} → ${r.destination} (${r.distance_km} km)</option>`).join('');
+}
+
+/* ── Set today as default date ── */
+function setDefaultDates() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('s-date-depart').value = today;
+}
+
+// Init
+loadRouteSelect();
+loadDriversCache();
+setDefaultDates();
+</script>
+{% endblock %}

@@ -1,0 +1,719 @@
+{% extends "base.html" %}
+{% block title %}Assistant IA — Smart Delivery System{% endblock %}
+
+{% block content %}
+<div class="chat-layout">
+
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <div class="chat-sidebar">
+    <div class="chat-sidebar-header">
+      <div class="chat-sidebar-title">
+        <img src="{{ url_for('static', filename='images/chatbot.png') }}" style="width:16px;height:16px;vertical-align:middle;margin-right:6px"> Assistant IA
+      </div>
+      <button class="chat-new-btn" id="new-conv-btn" onclick="startNewConversation()">
+        + Nouvelle conversation
+      </button>
+    </div>
+
+    <!-- History Panel Removed (Now in Drawer) -->
+
+    <!-- Pipeline Status -->
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Pipeline LangGraph</div>
+      <div style="display:flex;flex-direction:column;gap:5px" id="pipeline-steps">
+        <div class="pipeline-step" id="step-router">
+          <span class="step-dot idle"></span>
+          <span class="step-label">Router</span>
+          <span class="step-tag" id="tag-router"></span>
+        </div>
+        <div class="pipeline-step" id="step-sql">
+          <span class="step-dot idle"></span>
+          <span class="step-label">SQL Query</span>
+          <span class="step-tag" id="tag-sql"></span>
+        </div>
+        <div class="pipeline-step" id="step-vector">
+          <span class="step-dot idle"></span>
+          <span class="step-label">ChromaDB</span>
+          <span class="step-tag" id="tag-vector"></span>
+        </div>
+        <div class="pipeline-step" id="step-llm">
+          <span class="step-dot idle"></span>
+          <span class="step-label">LLM (Qwen3)</span>
+          <span class="step-tag" id="tag-llm"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-hints">
+
+      <div class="hint-section-label" style="margin-top:4px">Statistiques</div>
+      <div class="hint-chip" onclick="sendHint(this)">Combien d'expéditions en retard ?</div>
+      <div class="hint-chip" onclick="sendHint(this)">Quel est le taux de livraison global ?</div>
+      <div class="hint-chip" onclick="sendHint(this)">Répartition des statuts d'expéditions</div>
+
+      <div class="hint-section-label" style="margin-top:16px">Chauffeurs</div>
+      <div class="hint-chip" onclick="sendHint(this)">Chauffeurs avec infractions élevées</div>
+      <div class="hint-chip" onclick="sendHint(this)">Chauffeurs en état de fatigue critique</div>
+      <div class="hint-chip" onclick="sendHint(this)">Chauffeurs sans infractions</div>
+
+      <div class="hint-section-label" style="margin-top:16px">Routes</div>
+      <div class="hint-chip" onclick="sendHint(this)">Routes au départ de Casablanca</div>
+      <div class="hint-chip" onclick="sendHint(this)">Itinéraires vers Marrakech</div>
+      <div class="hint-chip" onclick="sendHint(this)">Route avec le plus de retards</div>
+
+      <div class="hint-section-label" style="margin-top:16px">Alertes</div>
+      <div class="hint-chip" onclick="sendHint(this)">Toutes les anomalies critiques</div>
+      <div class="hint-chip" onclick="sendHint(this)">Expéditions en retard urgentes</div>
+      <div class="hint-chip" onclick="sendHint(this)">Risques prioritaires aujourd'hui</div>
+
+      <div class="hint-section-label" style="margin-top:16px">Technique</div>
+      <div class="hint-chip" onclick="sendHint(this)">Comment fonctionne Dynafleet ?</div>
+      <div class="hint-chip" onclick="sendHint(this)">Réglementation ADR 2025 matières dangereuses</div>
+      <div class="hint-chip" onclick="sendHint(this)">Procédures Volvo FH maintenance</div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════ CHAT MAIN ══════════════ -->
+  <div class="chat-main" id="chat-main-wrap">
+
+    <!-- TOP BAR CHAT -->
+    <div id="chat-topbar" style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.2);backdrop-filter:blur(8px);">
+      <div style="font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:1px;color:var(--text-sec)" id="active-conv-title">TruckMind AI</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span id="conv-msg-badge" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)"></span>
+        <button id="history-toggle-btn" onclick="toggleHistoryDrawer()" title="Historique des conversations"
+          style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(252,218,0,0.08);border:1px solid rgba(252,218,0,0.2);border-radius:8px;color:var(--amber);font-family:var(--font-ui);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Historique
+        </button>
+      </div>
+    </div>
+
+    <!-- HISTORY DRAWER (slide-in from right) -->
+    <div id="history-drawer" class="history-drawer">
+      <div class="history-drawer-header">
+        <span style="font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:1px;">Conversations</span>
+        <button onclick="toggleHistoryDrawer()" class="history-close-btn">&times;</button>
+      </div>
+      <div id="drawer-history-list" class="drawer-history-list"></div>
+    </div>
+    <!-- Backdrop -->
+    <div id="history-backdrop" class="history-backdrop" onclick="toggleHistoryDrawer()"></div>
+
+    <div class="chat-messages" id="chat-messages">
+      <!-- Welcome screen -->
+      <div class="chat-welcome" id="chat-welcome">
+        <div class="chat-welcome-icon" style="width:64px;height:64px;margin:0 auto 20px; border-radius:14px; overflow:hidden; box-shadow: 0 0 15px rgba(252,218,0,0.25); border: 1px solid rgba(252,218,0,0.3); background:#000;">
+          <img src="{{ url_for('static', filename='images/chatbot.png') }}" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="chat-welcome-title">TruckMind AI</div>
+        <div class="chat-welcome-sub">
+          PIPELINE RAG &middot; LANGGRAPH &middot; QWEN3-32B<br><br>
+          Router &rarr; SQL &rarr; ChromaDB &rarr; LLM<br><br>
+          Posez vos questions sur les expéditions,<br>
+          chauffeurs, routes, alertes et documentation technique.<br><br>
+          <span style="color:var(--amber)">FR &middot; EN &middot; AR</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- INPUT AREA -->
+    <div class="chat-input-area">
+      <div class="chat-input-wrap">
+        <textarea
+          class="chat-input"
+          id="chat-input"
+          placeholder="Posez une question sur la flotte, les routes, les chauffeurs, ou la documentation technique…"
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+      </div>
+      <button class="chat-send-btn" id="send-btn" onclick="sendMessage()" title="Envoyer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+    <div class="chat-input-meta" style="padding:0 24px 12px;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:var(--text-muted)">Entrée pour envoyer &middot; Shift+Entrée pour nouvelle ligne</span>
+      <span id="meta-info" style="display:none;font-family:var(--font-mono);font-size:10px;color:var(--teal)"></span>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+/* ── HISTORY DRAWER ── */
+.history-drawer {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 340px;
+  background: rgba(12, 12, 20, 0.96);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(252, 218, 0, 0.2);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.history-drawer.open { transform: translateX(0); }
+.history-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.history-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.history-close-btn:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+.drawer-history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.drawer-conv-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.drawer-conv-item:hover { background: rgba(252,218,0,0.05); border-color: rgba(252,218,0,0.15); }
+.drawer-conv-item.active-conv { background: rgba(252,218,0,0.08); border-color: rgba(252,218,0,0.3); }
+.drawer-conv-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--steel);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.drawer-conv-item.active-conv .drawer-conv-dot { background: var(--amber); box-shadow: 0 0 8px rgba(252,218,0,0.5); }
+.drawer-conv-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-sec);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+.drawer-conv-item.active-conv .drawer-conv-title { color: var(--amber); }
+.drawer-conv-meta { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); display: flex; gap: 8px; }
+.drawer-conv-actions { margin-left: auto; display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
+.drawer-conv-item:hover .drawer-conv-actions { opacity: 1; }
+.drawer-action-btn {
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 13px; padding: 2px 6px;
+  border-radius: 4px; transition: all 0.2s;
+}
+.drawer-action-btn:hover { background: rgba(239,68,68,0.1); color: var(--danger); }
+.history-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s;
+}
+.history-backdrop.open { opacity: 1; pointer-events: all; }
+.chat-main { position: relative; }
+/* ── Pipeline Steps ── */
+.pipeline-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.pipeline-step.active {
+  background: rgba(245,158,11,0.08);
+  color: var(--text-primary);
+}
+.pipeline-step.done {
+  color: var(--ok);
+}
+.pipeline-step.skipped {
+  color: var(--steel);
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.step-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.step-dot.idle    { background: var(--steel); }
+.step-dot.active  { background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: pulse-anim 1s infinite; }
+.step-dot.done    { background: var(--ok); }
+.step-dot.skipped { background: var(--steel); opacity: 0.4; }
+.step-label { flex: 1; }
+.step-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+/* ── Message pipeline badge ── */
+.msg-pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.pipe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+.pipe-badge.sql    { color: var(--teal);  border-color: rgba(6,182,212,0.3);  background: rgba(6,182,212,0.06); }
+.pipe-badge.vector { color: var(--acid);  border-color: rgba(163,230,53,0.3); background: rgba(163,230,53,0.06); }
+.pipe-badge.type   { color: var(--amber); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.06); }
+.pipe-badge.skip   { color: var(--steel); border-color: rgba(100,116,139,0.3);background: rgba(100,116,139,0.06); }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let isLoading    = false;
+let activeConvId = null;   // current conversation ID
+let lastUserMsg  = '';     // last Q sent (for context injection)
+let lastBotMsg   = '';     // last A received (for context injection)
+let msgCount     = 0;      // messages in current conversation
+const MAX_MSGS   = 10;     // mirror of server-side cap
+
+const messagesEl     = document.getElementById('chat-messages');
+const inputEl        = document.getElementById('chat-input');
+const sendBtn        = document.getElementById('send-btn');
+const drawerListEl   = document.getElementById('drawer-history-list');
+const badgeEl        = document.getElementById('conv-msg-badge');
+const titleEl        = document.getElementById('active-conv-title');
+const drawerEl       = document.getElementById('history-drawer');
+const backdropEl     = document.getElementById('history-backdrop');
+
+function toggleHistoryDrawer() {
+  drawerEl.classList.toggle('open');
+  backdropEl.classList.toggle('open');
+}
+
+/* ── Helpers ── */
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+function scrollToBottom() {
+  messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════
+// HISTORY LOGIC
+// ═══════════════════════════════════════════════════
+async function loadHistory(isInit = false) {
+  try {
+    const res  = await fetch('/api/history');
+    const data = await res.json();
+    renderHistoryList(data.conversations);
+    
+    // If it's the first load and we have an active conversation, load it
+    if (isInit && data.active_id) {
+      await loadConversation(data.active_id);
+    } else if (data.active_id && !activeConvId) {
+      activeConvId = data.active_id;
+    }
+  } catch(e) { console.warn('History unavailable', e); }
+}
+
+function renderHistoryList(convs) {
+  drawerListEl.innerHTML = '';
+  if (!convs || convs.length === 0) {
+    drawerListEl.innerHTML = '<div style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);text-align:center;padding:20px;">Aucune conversation</div>';
+    return;
+  }
+  [...convs].reverse().forEach(c => {
+    const isActive = c.id === activeConvId;
+    const item = document.createElement('div');
+    item.className = `drawer-conv-item ${isActive ? 'active-conv' : ''}`;
+    item.innerHTML = `
+      <div class="drawer-conv-dot"></div>
+      <div style="flex:1;overflow:hidden;">
+        <div class="drawer-conv-title">${c.title}</div>
+        <div class="drawer-conv-meta">
+          <span>${c.count} messages</span>
+          <span>&bull;</span>
+          <span>${c.created ? c.created.slice(0,10) : ''}</span>
+        </div>
+      </div>
+      <div class="drawer-conv-actions">
+        <button class="drawer-action-btn" onclick="deleteConv('${c.id}', event)" title="Supprimer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+      </div>
+    `;
+    item.addEventListener('click', () => loadConversation(c.id));
+    drawerListEl.appendChild(item);
+  });
+}
+
+async function loadConversation(convId) {
+  try {
+    const res  = await fetch(`/api/history/${convId}`);
+    const conv = await res.json();
+    if (conv.error) return;
+    activeConvId = convId;
+    msgCount     = conv.messages.length;
+    lastUserMsg  = '';
+    lastBotMsg   = '';
+    showWelcome();
+    conv.messages.forEach(m => {
+      if (m.role === 'user')      addMessage('user', m.text);
+      else if (m.role === 'assistant') {
+        addMessage('bot', m.text, m.type ? {type_requete: m.type, sources: m.sources||0} : null);
+        lastBotMsg  = m.text;
+      }
+    });
+    const userMsgs = conv.messages.filter(m => m.role === 'user');
+    if (userMsgs.length) lastUserMsg = userMsgs[userMsgs.length-1].text;
+    updateCounter();
+    loadHistory();
+    toggleHistoryDrawer(); // Close drawer on select
+  } catch(e) { console.error(e); }
+}
+
+async function deleteConv(convId, e) {
+  e.stopPropagation();
+  await fetch(`/api/history/${convId}/delete`, {method:'DELETE'});
+  if (activeConvId === convId) startNewConversation();
+  else loadHistory();
+}
+
+async function startNewConversation() {
+  activeConvId = null;
+  lastUserMsg  = '';
+  lastBotMsg   = '';
+  msgCount     = 0;
+  showWelcome();
+  resetPipeline();
+  document.getElementById('meta-info').style.display = 'none';
+  updateCounter();
+  loadHistory();
+}
+
+function updateCounter() {
+  if (activeConvId) {
+    badgeEl.textContent = `${Math.floor(msgCount/2)} / ${MAX_MSGS/2} échanges`;
+    const pct = msgCount / MAX_MSGS;
+    badgeEl.style.color = pct >= 0.8 ? 'var(--danger)' : pct >= 0.6 ? 'var(--warn)' : 'var(--amber)';
+    titleEl.textContent = `Conversation: ${activeConvId.slice(-6)}`;
+  } else {
+    badgeEl.textContent = '';
+    titleEl.textContent = 'Nouvelle conversation';
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+function scrollToBottom() {
+  messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' });
+}
+
+messagesEl.addEventListener('wheel', e => {
+  e.preventDefault();
+  messagesEl.scrollTop += e.deltaY;
+}, { passive: false });
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function showWelcome() {
+  messagesEl.innerHTML = `
+    <div class="chat-welcome" id="chat-welcome">
+      <div class="chat-welcome-icon" style="width:64px;height:64px;margin:0 auto 20px; border-radius:14px; overflow:hidden; box-shadow: 0 0 15px rgba(252,218,0,0.25); border: 1px solid rgba(252,218,0,0.3); background:#000;">
+        <img src="/static/images/chatbot.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div class="chat-welcome-title">TruckMind AI</div>
+      <div class="chat-welcome-sub">
+        PIPELINE RAG · LANGGRAPH · QWEN3-32B<br><br>
+        Router &rarr; SQL &rarr; ChromaDB &rarr; LLM<br><br>
+        Posez vos questions sur les expéditions,<br>
+        chauffeurs, routes, alertes et documentation technique.<br><br>
+        <span style="color:var(--amber)">FR · EN · AR</span>
+      </div>
+    </div>`;
+}
+
+function sendHint(el) {
+  inputEl.value = el.textContent.trim();
+  sendMessage();
+}
+
+function hideWelcome() {
+  const w = document.getElementById('chat-welcome');
+  if (w) w.remove();
+}
+
+// ═══════════════════════════════════════════════════
+// PIPELINE UI
+// ═══════════════════════════════════════════════════
+const STEPS = ['router', 'sql', 'vector', 'llm'];
+
+function resetPipeline() {
+  STEPS.forEach(s => {
+    const step = document.getElementById('step-' + s);
+    const dot  = step.querySelector('.step-dot');
+    const tag  = document.getElementById('tag-' + s);
+    step.className = 'pipeline-step';
+    dot.className  = 'step-dot idle';
+    if (tag) tag.textContent = '';
+  });
+}
+
+function setStepActive(name) {
+  const step = document.getElementById('step-' + name);
+  step.className = 'pipeline-step active';
+  step.querySelector('.step-dot').className = 'step-dot active';
+}
+
+function setStepDone(name, tag = '') {
+  const step  = document.getElementById('step-' + name);
+  const tagEl = document.getElementById('tag-' + name);
+  step.className = 'pipeline-step done';
+  step.querySelector('.step-dot').className = 'step-dot done';
+  if (tagEl && tag) {
+    tagEl.textContent = tag;
+    tagEl.style.cssText = 'background:rgba(16,185,129,0.1);color:var(--ok);border:1px solid rgba(16,185,129,0.25)';
+  }
+}
+
+function setStepSkipped(name, label = 'ignoré') {
+  const step  = document.getElementById('step-' + name);
+  const tagEl = document.getElementById('tag-' + name);
+  step.className = 'pipeline-step skipped';
+  step.querySelector('.step-dot').className = 'step-dot skipped';
+  if (tagEl) {
+    tagEl.textContent = label;
+    tagEl.style.cssText = 'background:transparent;color:var(--steel);border:1px solid rgba(100,116,139,0.2)';
+  }
+}
+
+function animatePipeline() {
+  resetPipeline();
+  const delays = { router: 0, sql: 500, vector: 1100, llm: 1800 };
+  Object.entries(delays).forEach(([step, delay]) => setTimeout(() => setStepActive(step), delay));
+}
+
+function finalizePipeline(typeRequete, sources, hasVector) {
+  const labels = { stats:'STATS', route:'ROUTE', chauffeur:'CHAUFFEUR', expedition:'EXPEDITION', alerte:'ALERTE', technique:'TECH', général:'GÉNÉRAL' };
+  setStepDone('router', labels[typeRequete] || typeRequete.toUpperCase());
+  setStepDone('sql', sources + ' résultats');
+  hasVector ? setStepDone('vector', 'docs') : setStepSkipped('vector', 'ignoré');
+  setStepDone('llm', 'OK');
+}
+
+// ═══════════════════════════════════════════════════
+// MESSAGES
+// ═══════════════════════════════════════════════════
+function addMessage(role, content, meta = null) {
+  hideWelcome();
+  const div  = document.createElement('div');
+  div.className = `msg ${role}`;
+  const time   = new Date().toLocaleTimeString('fr-MA', {hour:'2-digit', minute:'2-digit'});
+  const avatar = role === 'bot'
+    ? '<img src="/static/images/chatbot.png" style="width:24px;height:24px;object-fit:cover; border-radius:6px; background:#000;">'
+    : '<img src="/static/images/chauffeur.png" style="width:24px;height:24px;object-fit:cover; border-radius:6px; background:#000;">';
+
+  let html = '';
+  if (role === 'bot') {
+    const formatted = content
+      .replace(/###\s(.+)/g,           '<h3>$1</h3>')
+      .replace(/\*\*(.+?)\*\*/g,       '<strong>$1</strong>')
+      .replace(/`([^`]+)`/g,           '<code>$1</code>')
+      .replace(/^[-•]\s(.+)/gm,        '<li>$1</li>')
+      .replace(/(<li>[\s\S]*?<\/li>)+/g, m => `<ul>${m}</ul>`)
+      .split('\n').filter(l => l.trim()).join('<br>');
+
+    let pipelineHtml = '';
+    if (meta) {
+      const vectorTypes = ['route', 'chauffeur', 'technique', 'général'];
+      const hasVector   = vectorTypes.includes(meta.type_requete);
+      pipelineHtml = `
+        <div class="msg-pipeline">
+          <span class="pipe-badge type">${meta.type_requete || '?'}</span>
+          <span class="pipe-badge sql">${meta.sources} src SQL</span>
+          ${hasVector ? '<span class="pipe-badge vector">ChromaDB</span>' : '<span class="pipe-badge skip">Vector ignoré</span>'}
+        </div>`;
+    }
+    html = `
+      <div class="msg-avatar">${avatar}</div>
+      <div style="max-width:100%">
+        <div class="msg-bubble">${formatted}${pipelineHtml}</div>
+        <div class="msg-meta">${time}</div>
+      </div>`;
+  } else {
+    html = `
+      <div class="msg-avatar">${avatar}</div>
+      <div>
+        <div class="msg-bubble">${content}</div>
+        <div class="msg-meta">${time}</div>
+      </div>`;
+  }
+  div.innerHTML = html;
+  messagesEl.appendChild(div);
+  scrollToBottom();
+}
+
+function addTyping() {
+  hideWelcome();
+  const div = document.createElement('div');
+  div.className = 'msg bot'; div.id = 'typing-msg';
+  div.innerHTML = `
+    <div class="msg-avatar"><img src="/static/images/chatbot.png" style="width:24px;height:24px;object-fit:cover; border-radius:6px; background:#000;"></div>
+    <div class="msg-bubble" style="padding:8px 16px">
+      <div class="typing-indicator">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div>
+    </div>`;
+  messagesEl.appendChild(div);
+  scrollToBottom();
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-msg');
+  if (t) t.remove();
+}
+
+// ═══════════════════════════════════════════════════
+// SEND
+// ═══════════════════════════════════════════════════
+async function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text || isLoading) return;
+
+  isLoading = true;
+  sendBtn.disabled = true;
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+
+  addMessage('user', text);
+  addTyping();
+  animatePipeline();
+
+  try {
+    const res  = await fetch('/api/chat', {
+      method:  'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message:    text,
+        conv_id:    activeConvId,
+        last_user:  lastUserMsg,
+        last_bot:   lastBotMsg,
+      }),
+    });
+    const data = await res.json();
+    removeTyping();
+
+    if (data.error) {
+      addMessage('bot', 'Erreur : ' + data.error);
+      resetPipeline();
+    } else if (data.new_conversation) {
+      // Server auto-created a new conv (limit reached mid-flight)
+      activeConvId = data.conv_id;
+      lastUserMsg  = '';
+      lastBotMsg   = '';
+      msgCount     = 0;
+      updateCounter();
+      showWelcome(); // CLEAR the old messages
+      addMessage('bot', '⚠️ La limite de 10 messages a été atteinte. Une nouvelle conversation a été créée automatiquement. Veuillez reposer votre question.');
+      resetPipeline();
+      loadHistory();
+    } else {
+      // Normal response
+      if (data.conv_id) activeConvId = data.conv_id;
+      msgCount = data.msg_count || (msgCount + 2);
+      const vectorTypes = ['route', 'chauffeur', 'technique', 'général'];
+      const hasVector   = vectorTypes.includes(data.type_requete);
+      finalizePipeline(data.type_requete, data.sources, hasVector);
+      addMessage('bot', data.response, { type_requete: data.type_requete, sources: data.sources });
+
+      // Store last turn for context injection
+      lastUserMsg = text;
+      lastBotMsg  = data.response;
+
+      const metaEl = document.getElementById('meta-info');
+      metaEl.textContent = `conv: ${activeConvId?.slice(-6)} · ${Math.floor(msgCount/2)}/${MAX_MSGS/2} msgs · ${data.type_requete} · ${data.sources} SQL`;
+      metaEl.style.display = 'inline';
+
+      updateCounter();
+      loadHistory();
+
+      // If approaching limit, warn user
+      if (msgCount >= MAX_MSGS - 2) {
+        const warn = document.createElement('div');
+        warn.style.cssText = 'text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--warn);padding:8px;border:1px solid rgba(245,158,11,0.2);border-radius:8px;margin:0 auto;max-width:400px';
+        warn.textContent = `Attention : ${MAX_MSGS/2 - Math.floor(msgCount/2)} échange(s) restant(s) dans cette conversation.`;
+        messagesEl.appendChild(warn);
+        scrollToBottom();
+      }
+    }
+  } catch (err) {
+    removeTyping();
+    addMessage('bot', 'Erreur de connexion. Vérifiez que le serveur Flask est actif.');
+    resetPipeline();
+  }
+
+  isLoading = false;
+  sendBtn.disabled = false;
+  inputEl.focus();
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+loadHistory(true);
+</script>
+{% endblock %}

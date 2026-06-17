@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Delivery System{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/t_icons.png') }}">
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="{{ url_for('static', filename='images/icons.png') }}" alt="Logo"
+        style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(252,218,0,0.8));">
+    </div>
+    <div class="sidebar-nav">
+      <a href="/" class="nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+        <span class="nav-icon">
+          <img src="{{ url_for('static', filename='images/icons.png') }}" alt="Dashboard"
+            style="width: 22px; height: 22px; object-fit: contain; transition: transform 0.3s; filter: drop-shadow(0 0 5px rgba(252,218,0,0.5));">
+        </span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="/fleet" class="nav-item {% if request.endpoint == 'fleet' %}active{% endif %}">
+        <span class="nav-icon">
+          <img src="{{ url_for('static', filename='images/chauffeur.png') }}" alt="Flotte"
+            style="width: 22px; height: 22px; object-fit: contain; transition: transform 0.3s; filter: drop-shadow(0 0 5px rgba(252,218,0,0.5));">
+        </span>
+        <span class="nav-label">Flotte</span>
+      </a>
+      <a href="/chatbot" class="nav-item {% if request.endpoint == 'chatbot' %}active{% endif %}">
+        <span class="nav-icon">
+          <img src="{{ url_for('static', filename='images/chatbot.png') }}" alt="Assistant IA"
+            style="width: 22px; height: 22px; object-fit: contain; transition: transform 0.3s; filter: drop-shadow(0 0 5px rgba(252,218,0,0.5));">
+        </span>
+        <span class="nav-label">Assistant IA</span>
+      </a>
+      <a href="/manage" class="nav-item {% if request.endpoint == 'manage' %}active{% endif %}">
+        <span class="nav-icon">
+          <img src="{{ url_for('static', filename='images/money_management.png') }}" alt="Gestion"
+            style="width: 22px; height: 22px; object-fit: contain; transition: transform 0.3s; filter: drop-shadow(0 0 5px rgba(252,218,0,0.5));">
+        </span>
+        <span class="nav-label">Gestion</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-version">SDS v2.1</div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-title">SMART <span>DELIVERY</span></div>
+      <div class="topbar-right">
+        <span class="topbar-time" id="clock">--:--:--</span>
+        <div class="topbar-badge">
+          <div class="pulse-dot"></div>
+          LIVE
+        </div>
+      </div>
+    </header>
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    function tick() {
+      const now = new Date();
+      document.getElementById('clock').textContent =
+        now.toLocaleTimeString('fr-MA', { hour12: false });
+    }
+    tick(); setInterval(tick, 1000);
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+
+.env
+__pycache__/
+*.db
+uploads/
+uploads_sans_clean/
+main/data/chroma_db_logistique/
+main/main/data/chroma_db_logistique/
+test/data/chroma_db_logistique/
+

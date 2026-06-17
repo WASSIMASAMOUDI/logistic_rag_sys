@@ -1,0 +1,10 @@
+pandas 
+openpyxl 
+numpy
+sentence_transformers
+chromadb
+groq
+langchain_community
+langgraph
+pypdf
+flask

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Flotte — Smart Delivery System{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">GESTION <span class="accent">FLOTTE</span></div>
+    <div class="page-subtitle">Chauffeurs · Véhicules · Performance</div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid" id="fleet-kpi">
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="fleet-filters">
+    <button class="filter-btn active" onclick="filterDrivers('all', this)">Tous</button>
+    <button class="filter-btn" onclick="filterDrivers('ok', this)">✅ Sans risque</button>
+    <button class="filter-btn" onclick="filterDrivers('warning', this)">⚠ Attention</button>
+    <button class="filter-btn" onclick="filterDrivers('critique', this)">🔴 Critique</button>
+  </div>
+
+  <!-- DRIVER CARDS -->
+  <div class="driver-grid" id="driver-grid">
+    <div class="kpi-card skeleton" style="height:160px"></div>
+    <div class="kpi-card skeleton" style="height:160px"></div>
+    <div class="kpi-card skeleton" style="height:160px"></div>
+    <div class="kpi-card skeleton" style="height:160px"></div>
+    <div class="kpi-card skeleton" style="height:160px"></div>
+    <div class="kpi-card skeleton" style="height:160px"></div>
+  </div>
+
+  <!-- DETAIL TABLE -->
+  <div class="section-grid full" style="margin-top:24px">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Détail Chauffeurs</span>
+        <span class="card-badge amber" id="driver-count">—</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Permis</th>
+              <th>Heures Conduite</th>
+              <th>Repos Restant</th>
+              <th>Infractions</th>
+              <th>Missions</th>
+              <th>Risque</th>
+            </tr>
+          </thead>
+          <tbody id="driver-table-body">
+            <tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text-muted)">Chargement…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let allDrivers = [];
+
+async function loadFleet() {
+  const stats = await fetch('/api/stats').then(r => r.json());
+  document.getElementById('fleet-kpi').innerHTML = `
+    <div class="kpi-card"><div class="kpi-label">Total Chauffeurs</div><div class="kpi-value amber">${stats.nb_drivers}</div><div class="kpi-sub">Actifs en flotte</div><span class="kpi-icon">👤</span></div>
+    <div class="kpi-card ok"><div class="kpi-label">Sans Risque</div><div class="kpi-value ok">${stats.nb_drivers - stats.drivers_risk}</div><div class="kpi-sub">Opérationnels</div><span class="kpi-icon">✅</span></div>
+    <div class="kpi-card danger"><div class="kpi-label">À Risque</div><div class="kpi-value danger">${stats.drivers_risk}</div><div class="kpi-sub">Fatigue / Infractions</div><span class="kpi-icon">⚠</span></div>
+    <div class="kpi-card"><div class="kpi-label">Routes Actives</div><div class="kpi-value">${stats.nb_routes}</div><div class="kpi-sub">En opération</div><span class="kpi-icon">🗺</span></div>
+  `;
+
+  allDrivers = await fetch('/api/drivers').then(r => r.json());
+  renderDrivers(allDrivers);
+}
+
+function renderDrivers(drivers) {
+  document.getElementById('driver-count').textContent = drivers.length + ' chauffeurs';
+
+  // Cards
+  const grid = document.getElementById('driver-grid');
+  grid.innerHTML = drivers.map(d => {
+    const reposClass = d.repos === 0 ? 'danger' : (d.repos < 4 ? 'warn' : 'ok');
+    const infClass = d.infractions >= 3 ? 'danger' : (d.infractions >= 1 ? 'warn' : 'ok');
+    const reposLabel = d.repos === 0 ? '🔴 FATIGUÉ' : (d.repos < 4 ? '🟡 ATTENTION' : '🟢 OK');
+    return `<div class="driver-card risk-${d.risk}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div class="driver-name">${d.nom}</div>
+          <div class="driver-id">${d.id} · ${d.permis}</div>
+        </div>
+        <span class="badge ${d.risk === 'ok' ? 'badge-ok' : (d.risk === 'warning' ? 'badge-warn' : 'badge-danger')}">${d.risk.toUpperCase()}</span>
+      </div>
+      <div class="driver-stats">
+        <div class="driver-stat">
+          <div class="driver-stat-label">Heures</div>
+          <div class="driver-stat-value ${d.heures > 60 ? 'warn' : 'ok'}">${d.heures}h</div>
+        </div>
+        <div class="driver-stat">
+          <div class="driver-stat-label">Repos</div>
+          <div class="driver-stat-value ${reposClass}">${d.repos}h</div>
+        </div>
+        <div class="driver-stat">
+          <div class="driver-stat-label">Infractions</div>
+          <div class="driver-stat-value ${infClass}">${d.infractions}</div>
+        </div>
+        <div class="driver-stat">
+          <div class="driver-stat-label">Missions</div>
+          <div class="driver-stat-value">${d.missions}</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">${reposLabel}</div>
+    </div>`;
+  }).join('');
+
+  // Table
+  const tbody = document.getElementById('driver-table-body');
+  tbody.innerHTML = drivers.map(d => {
+    const riskBadge = d.risk === 'ok' ? 'badge-ok' : (d.risk === 'warning' ? 'badge-warn' : 'badge-danger');
+    const reposStyle = d.repos === 0 ? 'color:var(--danger)' : (d.repos < 4 ? 'color:var(--warn)' : 'color:var(--ok)');
+    const infStyle = d.infractions >= 3 ? 'color:var(--danger)' : (d.infractions >= 1 ? 'color:var(--warn)' : 'color:var(--ok)');
+    return `<tr>
+      <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--teal)">${d.id}</span></td>
+      <td><strong style="color:var(--text-primary)">${d.nom}</strong></td>
+      <td><span class="badge badge-info">${d.permis}</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px">${d.heures}h</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px;${reposStyle}">${d.repos}h</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:14px;font-weight:700;${infStyle}">${d.infractions}</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px">${d.missions}</span></td>
+      <td><span class="badge ${riskBadge}">${d.risk}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterDrivers(level, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = level === 'all' ? allDrivers : allDrivers.filter(d => d.risk === level);
+  renderDrivers(filtered);
+}
+
+loadFleet();
+</script>
+{% endblock %}

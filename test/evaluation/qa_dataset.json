@@ -1,0 +1,217 @@
+{
+  "dataset_name": "truck_llm_evaluation_set_35q",
+  "version": "2.0",
+  "sources": ["volvo_logistique.pdf", "Dynafleet_plaintext.pdf", "truck_logistic.db", "ADR_2025_Logistique.pdf"],
+  "questions_answers": [
+
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "Quelle configuration d'essieux est recommandée pour les charges lourdes nécessitant une traction maximale ?",
+      "answer": "Pour des charges lourdes nécessitant une traction maximale, les configurations à deux essieux propulseurs (6x4) sont recommandées.",
+      "difficulty": "facile"
+    },
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "Quels risques entraîne une mauvaise répartition du poids sur les essieux du camion ?",
+      "answer": "Une mauvaise répartition du poids peut provoquer une perte de contrôle (notamment en descente ou sur routes glissantes), endommager irrémédiablement les essieux, et causer une usure prématurée des pneumatiques et des composants mécaniques.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "À quoi sert le système de prise de force (PTO) sur les modèles Volvo FH et FM ?",
+      "answer": "Le système PTO permet d'alimenter des équipements auxiliaires liés à la superstructure tels que des pompes hydrauliques, des grues ou des systèmes de déchargement, élargissant ainsi les possibilités d'utilisation logistique du véhicule.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "Pourquoi faut-il ajuster correctement le déflecteur d'air Volvo selon la hauteur de la charge ?",
+      "answer": "Un déflecteur correctement ajusté réduit la résistance de l'air et donc la consommation de carburant, en particulier lors du transport de marchandises volumineuses. Il faut l'ajuster selon la hauteur de la charge pour obtenir le meilleur coefficient aérodynamique.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "Quelles précautions faut-il prendre lors du stationnement d'un véhicule chargé en pente ?",
+      "answer": "Il faut appliquer le frein de stationnement, vérifier que la commande est bloquée en position de stationnement, et utiliser des cales de roues pour immobiliser le convoi lorsqu'il est stationné en pente avec une charge lourde.",
+      "difficulty": "facile"
+    },
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "Comment l'utilisation du programmateur de vitesse contribue-t-elle à l'économie de carburant ?",
+      "answer": "Le programmateur de vitesse est particulièrement utile sur autoroute avec une charge stable car il permet de maintenir une allure constante et économique, évitant les changements de vitesse intempestifs qui augmentent inutilement la consommation.",
+      "difficulty": "facile"
+    },
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "Quels systèmes de freinage auxiliaire sont recommandés pour les convois chargés en montagne ?",
+      "answer": "Le frein moteur Volvo (VEB) et le régulateur de pression des gaz d'échappement (EPG) sont particulièrement conseillés pour les convois chargés sur routes en montagne ou comportant de longues descentes, afin de préserver les freins de service.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "volvo_logistique.pdf",
+      "question": "Pourquoi un mauvais alignement des roues avant est-il problématique sur le plan logistique ?",
+      "answer": "Un mauvais alignement augmente la résistance au roulement et la consommation de carburant, tout en provoquant une usure irrégulière et prématurée des pneumatiques, ce qui génère des coûts supplémentaires.",
+      "difficulty": "moyen"
+    },
+
+    {
+      "source_file": "Dynafleet_plaintext.pdf",
+      "question": "Quels sont les quatre domaines clés évalués par le Score d'Efficacité Carburant du Driver Coaching ?",
+      "answer": "Le score évalue : l'utilisation du moteur et des rapports, l'adaptation de la vitesse, l'anticipation et le freinage, ainsi que les arrêts.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "Dynafleet_plaintext.pdf",
+      "question": "Sur quelle échelle est noté le Score d'Efficacité Carburant du Driver Coaching Dynafleet ?",
+      "answer": "Le Score d'Efficacité Carburant est noté de 0 à 100.",
+      "difficulty": "facile"
+    },
+    {
+      "source_file": "Dynafleet_plaintext.pdf",
+      "question": "Quels polluants peut-on surveiller via l'empreinte environnementale dans Dynafleet ?",
+      "answer": "Il est possible de surveiller le CO2, les NOx, les particules, le CO et les HC (hydrocarbures).",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "Dynafleet_plaintext.pdf",
+      "question": "Sur quelle période maximale peut-on analyser les données dans le Rapport d'Efficacité Carburant ?",
+      "answer": "Les rapports peuvent couvrir une période allant jusqu'à 13 mois.",
+      "difficulty": "facile"
+    },
+    {
+      "source_file": "Dynafleet_plaintext.pdf",
+      "question": "Quels formats d'export sont disponibles pour les rapports Dynafleet et comment peuvent-ils être transmis ?",
+      "answer": "Les rapports peuvent être exportés en PDF ou Excel, envoyés automatiquement par e-mail, et les données peuvent être transférées vers des services tiers via le Volvo Connect Developer Portal.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "Dynafleet_plaintext.pdf",
+      "question": "Quels types d'abonnements sont disponibles pour le service Dynafleet ?",
+      "answer": "Le service est disponible en plusieurs formules : mensuel (DF-FUELM) ou prépayé sur 6 mois, 1, 2, 3, 4 ou 5 ans.",
+      "difficulty": "facile"
+    },
+
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Combien de routes sont enregistrées dans la base de données logistique ?",
+      "answer": "La base de données contient 14 routes enregistrées.",
+      "difficulty": "facile"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Quelles restrictions s'appliquent à la route entre Casablanca et Marrakech (RT-CAS-MAR-004) ?",
+      "answer": "La route RT-CAS-MAR-004 est soumise aux restrictions suivantes : poids maximum de 40 tonnes et obligation d'être un véhicule articulé.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Quelle est la distance et la durée estimée de la route Casablanca–Agadir dans la base de données ?",
+      "answer": "La route Casablanca–Agadir (RT-CAS-AGA-005) est de 756 km avec une durée estimée de 10,8 heures sur autoroute.",
+      "difficulty": "facile"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Combien de chauffeurs sont enregistrés dans la base de données, et quel est le nombre maximum d'infractions observé parmi eux ?",
+      "answer": "25 chauffeurs sont enregistrés dans la base de données. Le nombre maximal d'infractions observé est de 3 infractions.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Un chargement (SHP-1447158014) affiche un poids de 70 000 kg. La route associée RT-MAR-MAR-012 est-elle compatible avec ce poids ?",
+      "answer": "La route RT-MAR-MAR-012 n'a pas de restriction de poids explicite dans la base de données. Cependant, un poids de 70 000 kg dépasse la limite légale habituelle de 40 t pour un véhicule articulé, ce qui nécessite une vérification réglementaire avant tout départ.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Combien d'expéditions (shipments) sont enregistrées dans la base de données logistique ?",
+      "answer": "La base de données contient 9 215 expéditions enregistrées.",
+      "difficulty": "facile"
+    },
+
+    {
+      "source_file": "ADR_2025_Logistique.pdf",
+      "question": "Quelles informations obligatoires doit contenir le document de transport ADR 2025 selon la section 5.4.1 ?",
+      "answer": "Le document de transport doit obligatoirement contenir : le numéro ONU précédé du sigle ONU, la désignation officielle de transport, la classe ou division, le groupe d'emballage (si applicable), le nombre et la description des colis, la quantité totale de chaque marchandise dangereuse, les noms et adresses du chargeur et du destinataire, ainsi qu'une déclaration de conformité réglementaire.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "ADR_2025_Logistique.pdf",
+      "question": "Quelles sont les obligations du conducteur en cas d'accident lors du transport de marchandises dangereuses selon l'ADR 2025 ?",
+      "answer": "Le conducteur doit arrêter le moteur, appliquer le frein de stationnement, ne pas fumer, revêtir son gilet de haute visibilité, mettre en place les signaux d'avertissement, identifier les marchandises impliquées à partir des étiquettes et du document de transport, puis alerter immédiatement les services de secours en leur communiquant le numéro ONU et la nature du danger.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "ADR_2025_Logistique.pdf",
+      "question": "Quelle est la durée de validité du certificat de conducteur ADR et quelles formations complémentaires sont exigées pour certaines classes de marchandises ?",
+      "answer": "Le certificat de conducteur ADR est valable cinq ans. Des formations complémentaires spécialisées sont exigées pour les conducteurs transportant des marchandises de la classe 1 (explosibles), des matières radioactives de la classe 7, et pour tous les conducteurs de véhicules-citernes quelle que soit la classe des matières transportées.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "ADR_2025_Logistique.pdf",
+      "question": "Qu'est-ce que le système de codes de restriction tunnels prévu par le chapitre 8.6 de l'ADR 2025 et quels sont les codes les plus restrictifs ?",
+      "answer": "Le chapitre 8.6 institue des codes de restriction de A à E selon le niveau de risque accepté pour chaque tunnel. Le code A n'impose aucune restriction supplémentaire, tandis que le code E, le plus restrictif, interdit le passage de tout véhicule transportant des marchandises dangereuses au-delà des seuils d'exemption. Par exemple, le tunnel du Mont-Blanc est soumis au code E.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "ADR_2025_Logistique.pdf",
+      "question": "Quand une entreprise est-elle obligée de désigner un conseiller à la sécurité pour le transport de marchandises dangereuses selon la section 1.8.3 de l'ADR 2025 ?",
+      "answer": "Toute entreprise dont l'activité comprend le transport de marchandises dangereuses par route, ou les opérations d'emballage, de chargement, de remplissage ou de déchargement liées à ce transport, est obligée de désigner un ou plusieurs conseillers à la sécurité. Cela concerne les transporteurs routiers, les chargeurs, les commissionnaires de transport, les opérateurs d'entrepôts et les entreprises procédant au remplissage ou à la vidange de citernes.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "ADR_2025_Logistique.pdf",
+      "question": "Quels équipements individuels et collectifs sont obligatoires à bord de tout véhicule transportant des marchandises dangereuses selon la section 8.1.5 de l'ADR 2025 ?",
+      "answer": "Chaque membre de l'équipage doit disposer d'un gilet de haute visibilité, d'une lampe électrique portable sans étincelles, de gants de protection et d'une protection oculaire. Le véhicule doit être équipé d'au moins un extincteur portatif d'au moins deux kilogrammes de poudre, de cales de roue adaptées, et de deux signaux d'avertissement autoportants. Selon les marchandises, un flacon de rinçage oculaire d'un litre minimum et un masque d'évacuation d'urgence peuvent également être requis.",
+      "difficulty": "difficile"
+    },
+
+    {
+      "source_file": "truck_logistic.db + volvo_logistique.pdf",
+      "question": "Un camion effectue la route RT-CAS-MAR-004 avec un poids de 38 000 kg. Quelle configuration d'essieux Volvo est recommandée et la route est-elle compatible avec ce chargement ?",
+      "answer": "La route RT-CAS-MAR-004 impose une limite de 40 tonnes et nécessite un véhicule articulé. Un poids de 38 000 kg est compatible. Pour ce type de charge sur autoroute, Volvo recommande une configuration 6x2 ou 6x4 selon le profil de la route, avec vérification de la répartition du poids sur les essieux pour éviter tout dépassement d'essieu.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "truck_logistic.db + ADR_2025_Logistique.pdf",
+      "question": "Un chauffeur ayant 3 infractions et 0 heure de repos restant doit transporter des marchandises dangereuses. Quels risques cumulés cela représente-t-il selon l'ADR 2025 et les règles de sécurité chauffeur ?",
+      "answer": "Ce chauffeur cumule deux niveaux de risque critiques : d'abord un risque sécurité (repos_restant_h = 0 → état de fatigue avéré, repos immédiat obligatoire) et 3 infractions (seuil rouge). Selon l'ADR 2025, le conducteur d'un véhicule transportant des marchandises dangereuses doit être en pleine capacité physique et mentale. Ce cumul rend le départ strictement interdit jusqu'à régularisation complète.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "Dynafleet_plaintext.pdf + truck_logistic.db",
+      "question": "Un chauffeur enregistré dans la base de données effectue régulièrement la route Casablanca–Agadir (756 km, 10,8h). Quels indicateurs Dynafleet faut-il surveiller en priorité pour cette route longue distance ?",
+      "answer": "Pour une route longue distance de 756 km et 10,8h, les indicateurs Dynafleet prioritaires sont : le Score d'Efficacité Carburant (anticipation, vitesse adaptée sur autoroute), les heures de conduite et temps de repos (heures_conduite et repos_restant_h dans la DB), l'empreinte CO2 sur la distance, et les éventuelles infractions au tachymètre. Le rapport d'efficacité carburant Dynafleet permettra d'identifier les comportements à corriger sur ce trajet spécifique.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "truck_logistic.db + ADR_2025_Logistique.pdf",
+      "question": "Parmi les expéditions en retard dans la base de données, lesquelles nécessitent une attention ADR particulière et pourquoi ?",
+      "answer": "Les expéditions en retard transportant des marchandises dangereuses (matières chimiques, carburants, explosifs) sont prioritaires car l'ADR 2025 impose des obligations strictes sur les durées d'immobilisation des véhicules chargés. Un retard prolongé peut engendrer des risques de surchauffe, fuite ou dégradation des emballages. Le gestionnaire doit croiser le type_marchandise des shipments en retard avec les classes ADR correspondantes pour déclencher les procédures d'urgence appropriées.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "Dynafleet_plaintext.pdf + volvo_logistique.pdf",
+      "question": "Comment combiner les données Dynafleet et les recommandations Volvo pour réduire la consommation de carburant d'un chauffeur ayant un score d'efficacité faible ?",
+      "answer": "Dynafleet identifie les quatre axes de sous-performance (moteur/rapports, vitesse, anticipation/freinage, arrêts). Pour chaque axe, les recommandations Volvo s'appliquent : utiliser le programmateur de vitesse sur autoroute (vitesse constante), ajuster le déflecteur selon la charge (aérodynamique), corriger l'alignement des roues (résistance roulement), et activer le frein moteur VEB en descente (éviter freinages brusques). La combinaison des deux sources permet un plan de coaching personnalisé et mesurable.",
+      "difficulty": "difficile"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Quel est le taux de retard global des expéditions dans la base de données et quelles routes concentrent le plus de retards ?",
+      "answer": "Le taux de retard doit être calculé depuis la base : nombre d'expéditions avec statut='retard' divisé par le total de 9215 expéditions. Les routes avec le plus de retards sont identifiables par une jointure shipments-routes groupée par route_id et filtrée sur statut='retard', classées par count décroissant.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Quels chauffeurs présentent simultanément des infractions élevées ET un repos insuffisant, et quel est leur niveau de risque combiné ?",
+      "answer": "Les chauffeurs à double risque sont ceux ayant infractions >= 2 ET repos_restant_h < 4. Leur niveau de risque est critique (🔴) car la fatigue amplifie le risque d'infraction supplémentaire. Ces chauffeurs ne doivent pas être affectés à une mission avant régularisation complète de leur temps de repos et examen de leurs infractions.",
+      "difficulty": "moyen"
+    },
+    {
+      "source_file": "truck_logistic.db",
+      "question": "Quelle est la répartition des expéditions par type de marchandise et quel type représente le volume le plus important en poids moyen ?",
+      "answer": "La répartition par type_marchandise est obtenue par GROUP BY type_marchandise avec COUNT et AVG(poids_kg). Le type de marchandise avec le poids moyen le plus élevé représente les expéditions les plus critiques pour la gestion des essieux et le respect des restrictions de poids sur les routes.",
+      "difficulty": "moyen"
+    }
+
+  ]
+}

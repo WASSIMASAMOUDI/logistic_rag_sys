@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Smart Delivery System{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">OPERATIONS <span class="accent">DASHBOARD</span></div>
+    <div class="page-subtitle">Maroc · Flotte Volvo · Temps réel</div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid" id="kpi-grid">
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+    <div class="kpi-card skeleton" style="height:100px"></div>
+  </div>
+
+  <!-- ROW 1 -->
+  <div class="section-grid">
+    <!-- Alerts -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">⚠ Alertes Actives</span>
+        <span class="card-badge danger" id="alerts-count">—</span>
+      </div>
+      <div class="card-body" id="alerts-list" style="max-height:320px;overflow-y:auto">
+        <div class="skeleton" style="height:60px;margin-bottom:8px"></div>
+        <div class="skeleton" style="height:60px;margin-bottom:8px"></div>
+        <div class="skeleton" style="height:60px"></div>
+      </div>
+    </div>
+
+    <!-- Shipment status donut -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Statut Expéditions</span>
+        <span class="card-badge amber" id="donut-total">—</span>
+      </div>
+      <div class="card-body">
+        <div class="donut-wrap" id="donut-wrap">
+          <div class="donut">
+            <svg width="120" height="120" viewBox="0 0 120 120" id="donut-svg">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="var(--bg-card2)" stroke-width="14"/>
+              <circle id="donut-ok"   cx="60" cy="60" r="50" fill="none" stroke="var(--ok)"   stroke-width="14" stroke-dasharray="0 314" stroke-linecap="round"/>
+              <circle id="donut-ret"  cx="60" cy="60" r="50" fill="none" stroke="var(--danger)" stroke-width="14" stroke-dasharray="0 314" stroke-dashoffset="0" stroke-linecap="round"/>
+              <circle id="donut-enc"  cx="60" cy="60" r="50" fill="none" stroke="var(--teal)"  stroke-width="14" stroke-dasharray="0 314" stroke-dashoffset="0" stroke-linecap="round"/>
+            </svg>
+            <div class="donut-center">
+              <span class="donut-pct" id="donut-pct">—</span>
+              <span class="donut-lbl">LIVRÉ</span>
+            </div>
+          </div>
+          <div class="donut-legend" id="donut-legend">
+            <div class="donut-legend-item"><div class="legend-dot" style="background:var(--ok)"></div><span style="color:var(--text-sec)">Livré <strong id="l-ok" style="color:var(--ok)">—</strong></span></div>
+            <div class="donut-legend-item"><div class="legend-dot" style="background:var(--danger)"></div><span style="color:var(--text-sec)">Retard <strong id="l-ret" style="color:var(--danger)">—</strong></span></div>
+            <div class="donut-legend-item"><div class="legend-dot" style="background:var(--teal)"></div><span style="color:var(--text-sec)">En cours <strong id="l-enc" style="color:var(--teal)">—</strong></span></div>
+          </div>
+        </div>
+
+        <!-- Progress bars -->
+        <div style="margin-top:20px" id="progress-bars">
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Taux livraison</span><span id="pb-livraison">—</span></div>
+            <div class="progress-bar"><div class="progress-fill ok" id="fill-livraison" style="width:0%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Taux retard</span><span id="pb-retard">—</span></div>
+            <div class="progress-bar"><div class="progress-fill danger" id="fill-retard" style="width:0%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Chauffeurs à risque</span><span id="pb-risk">—</span></div>
+            <div class="progress-bar"><div class="progress-fill warn" id="fill-risk" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2 -->
+  <div class="section-grid">
+    <!-- Merchandise types bar chart -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Types de Marchandise</span>
+        <span class="card-badge teal">TOP 6</span>
+      </div>
+      <div class="card-body">
+        <div class="bar-chart" id="merch-chart">
+          <div class="skeleton" style="height:22px;margin-bottom:10px"></div>
+          <div class="skeleton" style="height:22px;margin-bottom:10px"></div>
+          <div class="skeleton" style="height:22px;margin-bottom:10px"></div>
+          <div class="skeleton" style="height:22px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent shipments -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Expéditions Récentes</span>
+        <span class="card-badge amber">LIVE</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Trajet</th>
+              <th>Poids</th>
+              <th>Statut</th>
+              <th>Chauffeur</th>
+            </tr>
+          </thead>
+          <tbody id="shipments-tbody">
+            <tr><td colspan="5" style="text-align:center;padding:20px">
+              <div class="skeleton" style="height:14px;width:80%;margin:0 auto"></div>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUTES TABLE -->
+  <div class="section-grid full">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Routes Actives</span>
+        <span class="card-badge teal" id="routes-count">—</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Trajet</th>
+              <th>Distance</th>
+              <th>Durée</th>
+              <th>Type</th>
+              <th>Péages</th>
+              <th>Expéditions</th>
+              <th>Retards</th>
+            </tr>
+          </thead>
+          <tbody id="routes-tbody">
+            <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">Chargement…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const COLORS = ['#f59e0b','#06b6d4','#a3e635','#f97316','#8b5cf6','#ec4899'];
+
+async function loadStats() {
+  const d = await fetch('/api/stats').then(r=>r.json());
+
+  // KPI
+  const kpiGrid = document.getElementById('kpi-grid');
+  kpiGrid.innerHTML = `
+    <div class="kpi-card"><div class="kpi-label">Expéditions Total</div><div class="kpi-value amber">${d.total_shipments}</div><div class="kpi-sub">${d.nb_routes} routes actives</div><span class="kpi-icon">📦</span></div>
+    <div class="kpi-card ok"><div class="kpi-label">Livraisons OK</div><div class="kpi-value ok">${d.livres}</div><div class="kpi-sub">${d.taux_livraison}% taux succès</div><span class="kpi-icon">✅</span></div>
+    <div class="kpi-card danger"><div class="kpi-label">Retards</div><div class="kpi-value danger">${d.retards}</div><div class="kpi-sub">${d.taux_retard}% du total</div><span class="kpi-icon">⏰</span></div>
+    <div class="kpi-card"><div class="kpi-label">Chauffeurs</div><div class="kpi-value">${d.nb_drivers}</div><div class="kpi-sub">${d.drivers_risk} à risque</div><span class="kpi-icon">👤</span></div>
+    <div class="kpi-card warn"><div class="kpi-label">Risque Conducteurs</div><div class="kpi-value warn">${d.drivers_risk}</div><div class="kpi-sub">Infractions / Fatigue</div><span class="kpi-icon">⚠</span></div>
+    <div class="kpi-card"><div class="kpi-label">Poids Moyen</div><div class="kpi-value amber">${d.avg_poids}</div><div class="kpi-sub">kg / expédition</div><span class="kpi-icon">⚖</span></div>
+  `;
+
+  // Donut
+  document.getElementById('donut-total').textContent = d.total_shipments + ' total';
+  document.getElementById('donut-pct').textContent = d.taux_livraison + '%';
+  document.getElementById('l-ok').textContent = d.livres;
+  document.getElementById('l-ret').textContent = d.retards;
+  const enc = d.total_shipments - d.livres - d.retards;
+  document.getElementById('l-enc').textContent = enc;
+
+  const circ = 2 * Math.PI * 50;
+  const okDash  = (d.livres / d.total_shipments) * circ;
+  const retDash = (d.retards / d.total_shipments) * circ;
+  const encDash = (enc / d.total_shipments) * circ;
+
+  const donutOk  = document.getElementById('donut-ok');
+  const donutRet = document.getElementById('donut-ret');
+  const donutEnc = document.getElementById('donut-enc');
+
+  donutOk.setAttribute('stroke-dasharray',  `${okDash} ${circ - okDash}`);
+  donutRet.setAttribute('stroke-dasharray', `${retDash} ${circ - retDash}`);
+  donutRet.setAttribute('stroke-dashoffset', -okDash);
+  donutEnc.setAttribute('stroke-dasharray', `${encDash} ${circ - encDash}`);
+  donutEnc.setAttribute('stroke-dashoffset', -(okDash + retDash));
+
+  // Progress bars
+  document.getElementById('pb-livraison').textContent = d.taux_livraison + '%';
+  document.getElementById('pb-retard').textContent = d.taux_retard + '%';
+  const riskPct = Math.round(d.drivers_risk / d.nb_drivers * 100);
+  document.getElementById('pb-risk').textContent = riskPct + '%';
+  setTimeout(() => {
+    document.getElementById('fill-livraison').style.width = d.taux_livraison + '%';
+    document.getElementById('fill-retard').style.width = d.taux_retard + '%';
+    document.getElementById('fill-risk').style.width = riskPct + '%';
+  }, 100);
+}
+
+async function loadMerchandise() {
+  const data = await fetch('/api/shipments_by_type').then(r=>r.json());
+  const max = data[0]?.count || 1;
+  const chart = document.getElementById('merch-chart');
+  chart.innerHTML = data.slice(0,6).map((item, i) => {
+    const pct = Math.round(item.count / max * 100);
+    return `<div class="bar-row">
+      <div class="bar-name">${item.type}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:0%;background:${COLORS[i]};transition:width 1s ${i*0.1}s ease" data-w="${pct}">
+          <span class="bar-fill-label">${item.count}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  setTimeout(() => {
+    chart.querySelectorAll('.bar-fill').forEach(el => {
+      el.style.width = el.dataset.w + '%';
+    });
+  }, 100);
+}
+
+async function loadAlerts() {
+  const data = await fetch('/api/alerts').then(r=>r.json());
+  document.getElementById('alerts-count').textContent = data.length + ' alertes';
+  const list = document.getElementById('alerts-list');
+  if (!data.length) {
+    list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--ok);font-size:13px">✅ Aucune alerte active</div>';
+    return;
+  }
+  list.innerHTML = data.map(a => `
+    <div class="alert-item">
+      <div class="alert-dot ${a.level}"></div>
+      <div>
+        <div class="alert-msg">${a.message}</div>
+        <div class="alert-detail">${a.detail}</div>
+        ${a.date ? `<div class="alert-detail" style="margin-top:2px">📅 ${a.date}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function loadShipments() {
+  const data = await fetch('/api/recent_shipments').then(r=>r.json());
+  const tbody = document.getElementById('shipments-tbody');
+  tbody.innerHTML = data.slice(0,12).map(s => {
+    const badgeClass = s.statut === 'livre' ? 'badge-ok' : (s.statut === 'retard' ? 'badge-danger' : 'badge-info');
+    const icon = s.statut === 'livre' ? '✓' : (s.statut === 'retard' ? '!' : '→');
+    return `<tr>
+      <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--teal)">${s.id}</span></td>
+      <td style="font-size:12px">${s.depart||'?'} → ${s.destination||'?'}</td>
+      <td><span style="font-family:var(--font-mono);font-size:12px">${s.poids} kg</span></td>
+      <td><span class="badge ${badgeClass}">${icon} ${s.statut}</span></td>
+      <td style="font-size:12px;color:var(--text-muted)">${s.chauffeur||'N/A'}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function loadRoutes() {
+  const data = await fetch('/api/routes').then(r=>r.json());
+  document.getElementById('routes-count').textContent = data.length + ' routes';
+  const tbody = document.getElementById('routes-tbody');
+  tbody.innerHTML = data.slice(0,10).map(r => {
+    const delayPct = r.nb_shipments ? Math.round(r.nb_retards / r.nb_shipments * 100) : 0;
+    const riskClass = delayPct > 30 ? 'badge-danger' : (delayPct > 10 ? 'badge-warn' : 'badge-ok');
+    return `<tr>
+      <td><strong style="color:var(--text-primary)">${r.depart}</strong> <span style="color:var(--amber)">→</span> <strong style="color:var(--text-primary)">${r.destination}</strong></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px">${r.distance_km} km</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px">${r.duree_h}h</span></td>
+      <td><span class="badge badge-info">${r.type}</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px">${r.peages} MAD</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:12px">${r.nb_shipments}</span></td>
+      <td><span class="badge ${riskClass}">${r.nb_retards} (${delayPct}%)</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// Load everything
+Promise.all([loadStats(), loadMerchandise(), loadAlerts(), loadShipments(), loadRoutes()]);
+// Refresh every 30s
+setInterval(() => Promise.all([loadAlerts(), loadShipments()]), 30000);
+</script>
+{% endblock %}

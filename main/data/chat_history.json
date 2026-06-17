@@ -1,0 +1,178 @@
+{
+  "conversations": [
+    {
+      "id": "conv_1781482503_251",
+      "title": "Combien d'expéditions en retard ?",
+      "created": "2026-06-15T01:15:03",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Combien d'expéditions en retard ?",
+          "time": "01:15"
+        },
+        {
+          "role": "assistant",
+          "text": "### Réponse\n**Nombre total d'expéditions en retard : 192** (2,1% du total des 9215 expéditions).  \n\n#### Détails :\n- **Retards par route** :  \n  - Casablanca → Tetouan : 69 retards (le plus élevé).  \n  - Autres routes : 0 retards (Casablanca → Fes, Nador, Meknès, Marrakech).  \n\n- **Retards par chauffeur** :  \n  - Fouad El Mansouri : 14 retards (3,7%).  \n  - Ibrahim Chafik : 12 retards (3,2%).  \n  - Rida El Mekki : 12 retards (3,3%).  \n\n- **Retards récents** :  \n  - 10 expéditions en retard signalées (Casablanca → Agadir, Oujda, Tetouan).  \n\n#### Priorité :  \n- **Véhicule V444_0** gère 10 retards simultanés (Casablanca → Agadir/Oujda/Tetouan).  \n- **Chauffeurs à risque** (5 conducteurs avec 3 infractions et 0h de repos).",
+          "time": "01:15",
+          "type": "stats",
+          "sources": 26
+        },
+        {
+          "role": "user",
+          "text": "Répartition des statuts d'expéditions",
+          "time": "01:18"
+        },
+        {
+          "role": "assistant",
+          "text": "### Répartition des statuts d'expéditions  \n- **Livré** : 9023 expéditions (97.9%)  \n- **En retard** : 192 expéditions (2.1%)  \n\n### Priorité : Retards critiques  \n- **Casablanca → Tétouan** : 69 retards (5.5% des expéditions sur cette route)  \n- **Top 5 chauffeurs avec retards** :  \n  - Fouad El Mansouri : 14 retards (3.7%)  \n  - Ibrahim Chafik : 12 retards (3.2%)  \n  - Rida El Mekki : 12 retards (3.3%)  \n  - Karim El Amrani : 10 retards (2.8%)  \n  - Omar Fassi : 10 retards (2.7%)  \n\n### Conformité poids  \n- **Plage normale** : 20 000–70 000 kg (tous les camions respectent les limites ADR 2025).  \n- **Extrêmes** :  \n  - SHP-1447158014 : 70 000 kg (max)  \n  - SHP-1447363527 : 20 000 kg (min)",
+          "time": "01:18",
+          "type": "stats",
+          "sources": 16
+        },
+        {
+          "role": "user",
+          "text": "Comment fonctionne Dynafleet ?",
+          "time": "01:18"
+        },
+        {
+          "role": "assistant",
+          "text": "### Fonctionnement de Dynafleet  \nDynafleet est un service intégré à **Volvo Connect**, conçu pour optimiser la gestion de flotte de véhicules Volvo. Voici ses fonctionnalités clés :  \n\n1. **Interface centralisée**  \n   - Gère véhicules, remorques et actifs associés via une plateforme unifiée.  \n   - Permet le suivi en temps réel des opérations logistiques.  \n\n2. **Outils d'analyse**  \n   - **Rapport d'efficacité carburant** : Identifie les axes d'amélioration (conduite, itinéraires, consommation).  \n   - **Rapports personnalisables** : Plus de 100 paramètres analysables (ex. : temps d'arrêt, vitesse, trajets).  \n\n3. **Abonnements flexibles**  \n   - Formules mensuelles (ex. : `DF-FUELM`) ou adaptées aux besoins de la flotte.  \n   - Services modulables selon les priorités (maintenance, sécurité, optimisation).  \n\n4. **Intégration avec les réglementations**  \n   - Compatible avec les normes ADR, RID, IMDG pour les transports multimodaux.  \n   - Aide à la conformité via des alertes et rapports réglementaires.  \n\n5. **Optimisation logistique**  \n   - Analyse des poids de charge (moyenne : 24,6 tonnes) et des itinéraires (14 routes entre villes marocaines).  \n   - Suivi des 25 chauffeurs (statut de fatigue, infractions).  \n\n**Note** : Les données techniques précises sur les modules (ex. : PTO FH/FM) ne sont pas couvertes dans le contexte fourni. Pour des détails techniques, consulter les manuels Volvo ou les rapports Dynafleet dédiés.",
+          "time": "01:18",
+          "type": "technique",
+          "sources": 1
+        },
+        {
+          "role": "user",
+          "text": "Réglementation ADR 2025 matières dangereuses",
+          "time": "01:18"
+        },
+        {
+          "role": "assistant",
+          "text": "### Réglementation ADR 2025 : Matières Dangereuses  \n**⚠️ Priorité : Conformité légale et sécurité opérationnelle**  \n\n1. **Champ d'application**  \n   - L'ADR 2025 s'applique au transport international par route de matières et objets dangereux entre États signataires (97% des pays européens).  \n   - Version active depuis **1er janvier 2025**, avec mise à jour des classifications et obligations.  \n\n2. **Classification des matières**  \n   - **9 classes de danger** :  \n     - Classe 1 : Matières explosives (divisions 1.1 à 1.6).  \n     - Classe 2 : Gaz (inflammables, toxiques, non toxiques).  \n     - Classe 3 : Liquides inflammables.  \n     - Classes 4-9 : Solides inflammables, oxydants, toxiques, radioactifs, etc.  \n   - **Ségrégation obligatoire** : Interdiction de charger ensemble des matières incompatibles (ex. : acides et bases).  \n\n3. **Mesures de sûreté (Chapitre 1.10)**  \n   - **Deux niveaux d'obligations** :  \n     - **Niveau 1** : Formation des conducteurs et entreprises pour prévenir l'utilisation criminelle.  \n     - **Niveau 2** : Contrôles renforcés pour les matières à risque élevé (explosifs, toxiques).  \n   - **Poursuites pénales** : Non-respect entraîne des sanctions légales pour le conducteur et l'entreprise.  \n\n4. **Restrictions par codes de transport**  \n   - **Code B** : Interdit les matières à risque d'explosion massive (ex. : classe 1.1, gaz inflammables en citerne).  \n   - **Code C** : Étend les interdictions aux matières pouvant provoquer des nuages toxiques (ex. : gaz toxiques classe 2.3).  \n\n5. **Procédures opérationnelles**  \n   - **Chargement/déchargement** : Respect strict des règles de ségrégation et d'étiquetage.  \n   - **Formation obligatoire** : Tous les opérateurs doivent suivre des formations adaptées aux classes de marchandises transportées.  \n\n**⚠️ Rappel** : 2.1% des expéditions (192 retards) pourraient être liées à des retards de conformité ADR. Vérifier les certifications des marchandises (carrosserie, électronique, etc.) dans les 14 routes.",
+          "time": "01:18",
+          "type": "technique",
+          "sources": 1
+        },
+        {
+          "role": "user",
+          "text": "Procédures Volvo FH maintenance",
+          "time": "01:18"
+        },
+        {
+          "role": "assistant",
+          "text": "### Procédures de Maintenance Volvo FH  \n**1. Entretien Routinier**  \n- **Vérification des niveaux** : Huile moteur, liquide de refroidissement, liquide de frein, et huile de transmission.  \n- **Inspection des filtres** : Remplacement des filtres à air, huile, et carburant selon les intervalles recommandés (généralement tous les 10 000 km ou 6 mois).  \n- **Contrôle des câbles et connectiques** : Vérifier l'état des câbles électriques, des connecteurs, et des systèmes de freinage.  \n\n**2. Maintenance du Moteur**  \n- **Utilisation de produits Volvo** : Utiliser uniquement les huiles et additifs recommandés par Volvo pour garantir la durabilité du moteur.  \n- **Surveillance de la température** : Vérifier le fonctionnement du système de refroidissement pour éviter les surchauffes.  \n- **Nettoyage du système d'échappement** : Inspecter les canalisations et les filtres DPF (Diesel Particulate Filter) pour éviter les obstructions.  \n\n**3. Contrôle des Pneus et Freins**  \n- **Pression des pneus** : Ajuster la pression selon les charges transportées (cf. ADR 2025 pour les normes de sécurité).  \n- **Usure des freins** : Vérifier l'épaisseur des disques, des plaquettes, et le liquide de frein. Remplacer en cas de dégradation.  \n\n**4. Chargement et Configuration**  \n- **Répartition du poids** : Respecter les limites de charge maximale (70 000 kg) et équilibrer la répartition pour éviter les usures prématurées.  \n- **Choix du modèle FH** : Adapter la configuration (essieux, motorisation) aux types de marchandises (ex. : carrosserie, électronique) pour optimiser la stabilité.  \n\n**5. Utilisation de Volvo Connect**  \n- **Rapports d'efficacité carburant** : Analyser les données via Dynafleet pour identifier les écarts de consommation et ajuster les pratiques de conduite.  \n- **Alertes préventives** : Activer les notifications pour suivre les besoins en maintenance (huile, freins, etc.) et planifier les interventions.  \n\n**Documents de Référence**  \n- Manuel technique Volvo FH (Chapitre 4 : Maintenance préventive).  \n- ADR 2025 (Chapitre 7 : Normes de chargement et sécurité).  \n- Guide Dynafleet (Section 3 : Optimisation de la flotte).  \n\n**Priorité** : Une maintenance régulière réduit les retards (2,1 % des expéditions en retard) et prolonge la durée de vie des véhicules.",
+          "time": "01:18",
+          "type": "technique",
+          "sources": 1
+        }
+      ]
+    },
+    {
+      "id": "conv_1781482729_351",
+      "title": "Réglementation ADR 2025 matières dangereuses",
+      "created": "2026-06-15T01:18:49",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Comment fonctionne Dynafleet ?",
+          "time": "01:19"
+        },
+        {
+          "role": "assistant",
+          "text": "### Réponse  \n**Dynafleet** est un service intégré à **Volvo Connect**, conçu pour optimiser la gestion de flotte de véhicules Volvo. Voici son fonctionnement clé :  \n\n1. **Interface unifiée**  \n   - Gère véhicules, remorques et actifs via une plateforme centralisée (Volvo Connect).  \n   - Permet le suivi en temps réel des opérations logistiques.  \n\n2. **Analyse d'efficacité carburant**  \n   - Identifie les axes d'amélioration via des rapports détaillés (ex. : consommation, conduite éco-responsable).  \n   - Propose des paramètres personnalisables pour approfondir l'analyse (ex. : filtres par route, chauffeur, type de charge).  \n\n3. **Services modulables**  \n   - Disponible en formules d'abonnement flexibles (mensuel, annuel, etc.), adaptées aux besoins de la flotte.  \n   - Intègre des outils comme les rapports de performance, la planification de maintenance, et la gestion des itinéraires.  \n\n4. **Intégration avec les données techniques**  \n   - Compatible avec les modèles Volvo FH/FM, exploitant leurs spécificités (ex. : PTO pour équipements auxiliaires).  \n   - Synchronise les données de charge, de poids et de routes pour optimiser les trajets.  \n\n5. **Conformité réglementaire**  \n   - Aide à respecter les normes ADR, IMDG, RID via des alertes et rapports adaptés aux contrôles (ex. : marquage, conditionnement).  \n\nPour une utilisation optimale, Dynafleet s'appuie sur les données de la flotte (ex. : 25 chauffeurs, 14 routes, 9215 expéditions) pour fournir des insights opérationnels précis.",
+          "time": "01:19",
+          "type": "technique",
+          "sources": 1
+        }
+      ]
+    },
+    {
+      "id": "conv_1781482796_978",
+      "title": "Procédures Volvo FH maintenance",
+      "created": "2026-06-15T01:19:56",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Réglementation ADR 2025 matières dangereuses",
+          "time": "01:20"
+        },
+        {
+          "role": "assistant",
+          "text": "### Réglementation ADR 2025 : Matières Dangereuses  \n**⚠️ Priorité : Sécurité, Ségrégation, et Formation**  \n\n#### 1. **Champ d'Application**  \n- L'ADR 2025 régit **tous les transports internationaux de matières dangereuses par route** entre États signataires (la plupart des pays européens).  \n- **Version active depuis 1er janvier 2025**, avec mises à jour régulières pour aligner les normes de sécurité.  \n\n#### 2. **Classification des Matières**  \n- **9 classes de danger** :  \n  - **Classe 1** : Explosifs (divisions 1.1 à 1.6 selon le type d'explosion).  \n  - **Classe 2** : Gaz (inflammables, toxiques, non toxiques).  \n  - **Classe 3** : Liquides inflammables.  \n  - **Classes 4-9** : Solides inflammables, oxydants, toxiques, radioactifs, etc.  \n- **Sous-divisions** selon le risque principal (ex. : groupes de compatibilité pour les explosifs).  \n\n#### 3. **Règles de Ségrégation**  \n- **Interdiction de co-transport** de matières incompatibles (ex. : acides et bases, oxydants et réducteurs).  \n- **Chapitre 7 de l'ADR** : Définit les règles de chargement/déchargement pour éviter réactions chimiques ou risques combinés.  \n\n#### 4. **Dispositions de Sécurité (Chapitre 1.10)**  \n- **Deux niveaux d'obligations** :  \n  - **Niveau 1** : Formation obligatoire pour tous les opérateurs (chauffeurs, entreprises).  \n  - **Niveau 2** : Contrôles renforcés pour matières à risque élevé (ex. : explosifs, toxiques).  \n- **Poursuites pénales** possibles en cas de non-respect (chauffeur et entreprise responsables).  \n\n#### 5. **Codes de Transport et Restrictions**  \n- **Code B** : Interdit matières à risque d'explosion massive (ex. : grandes quantités de gaz inflammables).  \n- **Code C** : Étend les interdictions aux matières pouvant provoquer des nuages toxiques (ex. : gaz toxiques classe 2.3 en quantités élevées).  \n\n#### 6. **Conséquences du Non-Respect**  \n- **Pénalités** : Retards, amendes, suspension des autorisations de transport.  \n- **Risques graves** : Accidents environnementaux, blessures, ou incidents terroristes (ADR 2025 vise à minimiser ces risques).  \n\n---\n\n**⚠️ Application Pratique pour la Flotte**  \n- Vérifier la **compatibilité des marchandises** avant chargement (ex. : éviter les carrosseries et produits chimiques dans le même camion).  \n- Former les chauffeurs aux **procédures de sécurité ADR** (obligatoire pour toutes les expéditions dangereuses).  \n- Respecter les **codes de transport** pour les marchandises critiques (ex. : suspension, transmission, pièces moteur si classées comme dangereuses).",
+          "time": "01:20",
+          "type": "technique",
+          "sources": 1
+        }
+      ]
+    },
+    {
+      "id": "conv_1781482891_802",
+      "title": "Répartition des statuts d'expéditions",
+      "created": "2026-06-15T01:21:31",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Quel est le taux de livraison global ?",
+          "time": "01:21"
+        },
+        {
+          "role": "assistant",
+          "text": "### Réponse\nLe taux de livraison global est de **97,9 %** (9023 expéditions livrées sur un total de 9215).  \n- **Retards** : 192 expéditions (2,1 %) en retard.  \n- **Poids moyen des colis** : 24 602,1 kg (plage 20 000–70 000 kg).  \n\nAucun alerte prioritaire détectée dans les données fournies.",
+          "time": "01:21",
+          "type": "stats",
+          "sources": 16
+        }
+      ]
+    },
+    {
+      "id": "conv_1781483014_129",
+      "title": "Risques prioritaires aujourd'hui",
+      "created": "2026-06-15T01:23:34",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Comment fonctionne Dynafleet ?",
+          "time": "01:23"
+        },
+        {
+          "role": "assistant",
+          "text": "### Réponse\n\n**Dynafleet** est un service intégré à **Volvo Connect**, conçu pour optimiser la gestion de flottes de véhicules Volvo (camions, remorques, actifs). Voici son fonctionnement clé :\n\n- **Interface unifiée** : Gère l'ensemble des véhicules, remorques et actifs via une plateforme centralisée.  \n- **Analyse de l'efficacité carburant** :  \n  - Fournit un **rapport d'efficacité carburant** pour identifier les axes d'amélioration (ex. : conduite éco-responsable, optimisation de routes).  \n  - Permet une analyse approfondie via **des centaines de paramètres** (consommation, vitesse, temps d'arrêt, etc.).  \n- **Rapports personnalisables** : Adapte les données à vos besoins (ex. : KPI, indicateurs de performance, comparaisons entre chauffeurs/véhicules).  \n- **Intégration Volvo** : Compatible avec les modèles Volvo FH/FM et leurs systèmes (ex. : PTO pour équipements auxiliaires).  \n- **Flexibilité d'abonnement** : Disponible en formules mensuelles (ex. : DF-FUELM) ou adaptées aux besoins de la flotte.  \n\n**Objectif** : Réduire les coûts opérationnels, améliorer la productivité et garantir la conformité réglementaire (ADR, IMDG, etc.) via des données en temps réel et des outils d'analyse.",
+          "time": "01:23",
+          "type": "technique",
+          "sources": 1
+        },
+        {
+          "role": "user",
+          "text": "Comment fonctionne Dynafleet ?",
+          "time": "01:24"
+        },
+        {
+          "role": "assistant",
+          "text": "### Fonctionnement de Dynafleet  \nDynafleet est un service intégré à **Volvo Connect**, conçu pour optimiser la gestion de flotte de véhicules Volvo. Voici ses fonctionnalités clés :  \n\n1. **Gestion centralisée**  \n   - Permet de superviser véhicules, remorques et actifs via une interface unifiée (Volvo Connect).  \n   - Intégré aux systèmes Volvo FH/FM pour une compatibilité optimale.  \n\n2. **Analyse de l'efficacité carburant**  \n   - Outil principal : **rapport d'efficacité carburant** pour identifier les axes d'amélioration.  \n   - Analyse détaillée via des centaines de paramètres (conduite, consommation, itinéraires).  \n\n3. **Rapports personnalisables**  \n   - Génération de rapports adaptés aux besoins de l'entreprise (ex. : suivi de la consommation, analyse de trajets).  \n   - Intégration de données techniques des camions Volvo (poids, routes, infractions).  \n\n4. **Formules d'abonnement flexibles**  \n   - Disponibilité en abonnements mensuels (ex. : **DF-FUELM**) ou sur mesure.  \n   - Adapté aux flottes de taille variable (ex. : 25 chauffeurs et 14 routes dans votre cas).  \n\n5. **Conformité réglementaire**  \n   - Aide à respecter les normes ADR 2025, IMDG, RID via des alertes et rapports (ex. : poids des marchandises, infractions des chauffeurs).  \n\nPour des détails techniques, consulter les manuels Volvo ou les ressources officielles Dynafleet.",
+          "time": "01:24",
+          "type": "technique",
+          "sources": 1
+        },
+        {
+          "role": "user",
+          "text": "Toutes les anomalies critiques",
+          "time": "01:24"
+        },
+        {
+          "role": "assistant",
+          "text": "### ⚠️ ALERTES CRITIQUES  \n**1. Conduite en état de fatigue extrême (5 chauffeurs)**  \n- DRV-0015 (Ibrahim Chafik) : 11.9h de conduite, 0h de repos 🔴 FATIGUÉ, 3 infractions 🔴 RISQUE ÉLEVÉ  \n- DRV-0024 (Rida El Mekki) : 11.9h de conduite, 0h de repos 🔴 FATIGUÉ, 3 infractions 🔴 RISQUE ÉLEVÉ  \n- DRV-0006 (Mehdi Tazi) : 11.9h de conduite, 0h de repos 🔴 FATIGUÉ, 3 infractions 🔴 RISQUE ÉLEVÉ  \n- DRV-0016 (Fouad El Mansouri) : 11.9h de conduite, 0h de repos 🔴 FATIGUÉ, 3 infractions 🔴 RISQUE ÉLEVÉ  \n- DRV-0011 (Mohamed Tahiri) : 11.9h de conduite, 0h de repos 🔴 FATIGUÉ, 3 infractions 🔴 RISQUE ÉLEVÉ  \n\n**2. Retards critiques sur route (5 expéditions)**  \n- SHP-1447371399 (V444_0) : Casablanca → Tetouan, chauffeur Adil El Hankari 🔴 RETARD  \n- SHP-1447295149 (V444_0) : Casablanca → Tetouan, chauffeur Adil El Hankari 🔴 RETARD  \n- SHP-1447162931 (V444_0) : Casablanca → Tetouan, chauffeur Rachid Bennani 🔴 RETARD  \n- SHP-1447232860 (V444_0) : Casablanca → Tetouan, chauffeur Mohamed Tahiri 🔴 RETARD  \n- SHP-1447321323 (V444_0) : Casablanca → Tetouan, chauffeur Rida El Mekki 🔴 RETARD  \n\n**3. Conduite à risque élevé (5 chauffeurs)**  \n- DRV-0015 (Ibrahim Chafik) : 3 infractions, 0h de repos 🔴 RISQUE ÉLEVÉ  \n- DRV-0024 (Rida El Mekki) : 3 infractions, 0h de repos 🔴 RISQUE ÉLEVÉ  \n- DRV-0006 (Mehdi Tazi) : 3 infractions, 0h de repos 🔴 RISQUE ÉLEVÉ  \n- DRV-0016 (Fouad El Mansouri) : 3 infractions, 0h de repos 🔴 RISQUE ÉLEVÉ  \n- DRV-0011 (Mohamed Tahiri) : 3 infractions, 0h de repos 🔴 RISQUE ÉLEVÉ  \n\n---\n\n### 🔍 ANALYSE TECHNIQUE  \n- **Corrélation entre fatigue et retards** : 4 des 5 retards impliquent des chauffeurs en état de fatigue extrême (DRV-0011, DRV-0024, DRV-0006, DRV-0016).  \n- **Répétition des retards** : 3 retards concernent le même véhicule (V444_0) et la même route (Casablanca → Tetouan), suggérant un problème opérationnel ou logistique récurrent.  \n- **Conformité ADR 2025** : Les infractions des chauffeurs (3 ou plus) nécessitent une vérification immédiate de leur conformité aux règles de conduite pour marchandises dangereuses (étiquetage, procédures d'urgence).  \n\n---\n\n### ⚙️ RECOMMANDATIONS  \n1. **Suspension immédiate** des chauffeurs DRV-0015, DRV-0024, DRV-0006, DRV-0016, DRV-0011 pour repos forcé (ADR 2025, article 9.3.1).  \n2. **Révision de la route Casablanca-Tetouan** pour identifier les causes des retards (trafic, planification, état routier).  \n3. **Formation renforcée** sur les infractions pour les chauffeurs concernés, avec suivi par Dynafleet.  \n4. **Vérification des étiquetages** des colis transportés par V444_0 pour conformité ADR (losanges de danger, numéros ONU).",
+          "time": "01:24",
+          "type": "chauffeur",
+          "sources": 15
+        }
+      ]
+    },
+    {
+      "id": "conv_1781644478_649",
+      "title": "données ID de véculs 10",
+      "created": "2026-06-16T22:14:38",
+      "messages": []
+    }
+  ],
+  "active_id": "conv_1781644478_649"
+}
